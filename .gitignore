@@ -1,0 +1,16 @@
+Barcodes/Barcodesv1/
+Barcodes/Barcodesv2/
+Barcodes/Barcodesv3/
+Barcodes/Barcodesv4/
+Barcodes/Contrast/
+Barcodes/UniversalData/
+Barcodes/Barcoding_C12W1/C12W1_unknowns/Results/Summary_all_unknow_allels.txt
+Barcodes/Barcoding_C2W24/C2W24_unknowns/Results/Summary_all_unknow_allels_RA.txt
+Barcodes/Barcoding_C12W1/C12W1_unknowns/Results/Summary_all_unknow_allels_RA.txt
+*.csv
+*.xlsm
+*.tmp
+*.pdf
+.DS_Store
+.Rhistory
+.RData

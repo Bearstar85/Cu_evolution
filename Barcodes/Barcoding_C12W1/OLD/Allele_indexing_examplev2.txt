@@ -1,0 +1,5 @@
+Barcode	Uniqe_all	Uniqe_pop	Homologs	Strain	Keep_VG	Keep_GP	Keep_1copy	Index	Equation
+P21502_101_C12W1_1*	No	No	aa	GP2-4_26or71	No	No	Yes	1	\\bP21502_101_C12W1_1*\\b * (\\bP21502_101_C12W1_2\\b / (\\bP21502_101_C12W1_2\\b + \\bP21502_107_C12W1_2\\b))
+P21502_101_C12W1_2	Yes	Yes	an	GP2-4_26	Yes	Yes	Yes	2	\\bP21502_101_C12W1_2\\b
+P21502_107_C12W1_1*	No	No	aa	GP2-4_26or71	No	No	No	49	\\bP21502_107_C12W1_1*\\b * (\\bP21502_107_C12W1_2 \\b / (\\bP21502_101_C12W1_2\\b + \\bP21502_107_C12W1_2\\b))
+P21502_107_C12W1_2	Yes	Yes	bt	GP2-4_71	Yes	Yes	Yes	50	\\bP21502_107_C12W1_2\\b
