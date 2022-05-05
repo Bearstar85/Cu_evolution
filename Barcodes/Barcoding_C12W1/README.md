@@ -11,7 +11,7 @@ In short the script reads the input files (all files with .tsv extention in the 
 
 The non-perfect allel matching amplicons (unknowns) are also quantified and analysed for patterns. This is through the **unknowns.R** script uses a simillar directory and data structure as **C12W1_abundances** described above, but separerade into **C12W1_unknowns** directory and with observations of each uniqe unknown amplicon sequence, rather than matches to known allels.
 
-![Experimetal Design](https://github.com/Bearstar85/R/blob/master/Cu_evolution/ExperimentalDesign1.jpg)
+![Experimetal Design1](https://github.com/Bearstar85/Cu_evolution/blob/master/ExperimentalDesign1.jpg)
 
 ## Input files and metadata
 
