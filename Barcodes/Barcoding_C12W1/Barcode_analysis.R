@@ -82,7 +82,7 @@ solve_allele_equation <- function(data, n_obs, allele_col, equation) {
 #Lets loop the analysis
 #First make a file to append to
 rm(All_reads)
-All_reads <- data.frame(matrix(NA, ncol=24, nrow=0))[-1]
+All_reads <- data.frame(matrix(NA, ncol=26, nrow=0))[-1]
 header <- read.csv("Indexed/1_header.tmp", header = F)
 header <- t(header)
 colnames(All_reads) <- (header)
@@ -878,3 +878,77 @@ head(PCA2)
 ggbiplot(PCA1, ellipse=TRUE)
 ggbiplot(PCA2, ellipse=TRUE)
 
+#StrainCounts#####
+#Now I will modify the analysis to make quantitative predictions about strain density using barcodes
+
+#Lets loop the analysis
+#First make a file to append to
+rm(All_Strains)
+All_Strains <- data.frame(matrix(NA, ncol=26, nrow=0))[-1]
+header <- read.csv("Indexed/1_header.tmp", header = F)
+header <- t(header)
+colnames(All_reads) <- (header)
+
+#i <-"P21502_146.tsv"
+for (i in InputFiles) {
+  #Import data (too be looped)
+  input=paste("Input/",i,"", sep="")
+  myData <- read.table(file = input, sep = '\t', header = TRUE)
+  
+  #Change Indexing of strains and allels
+  myData2 <- gsub('_C12W1_', ',', myData$Barcode)
+  myData <- cbind(myData,myData2)
+  myData <- myData %>% separate(myData2, c("ID.1", "allel"), sep = ",",remove = TRUE, convert = FALSE)
+  myData3 <- join(Allels, myData, by = "Barcode")
+  sapply(myData3, class)
+  #length(unique(myData3$Diffrential_ID))
+  #sort(unique(myData3$Diffrential_ID))
+  
+  #Solve differential equation
+  myData4 <- solve_allele_equation(data = myData3, 
+                                   n_obs = "Total", 
+                                   allele_col = "Diffrential_ID", 
+                                   equation = "Differential_equation_strains")
+  
+  #The equation produces NA for 0/0, change to 0 again
+  myData4$Total_C[is.na(myData4$Total_C)] <- 0
+  
+  #Now we can remove the second allels
+  myData4 <- subset.data.frame(myData4, grepl('YES|NO', myData4$Modified_allelcounts))
+  #Generate sample ID for indexing experimental samples
+  
+  Name <- i
+  ID <- gsub('.tsv', '', Name)
+  N <- nrow(myData4)
+  Sample <- rep(ID, each = N)
+  Sample <- as.data.frame(Sample)
+  colnames(Sample) <- c("ID")
+  Index <- join(Sample, Indexing, by = "ID")
+  
+  #Fuse the sample indexing with data
+  myData5 <- cbind(Index, myData4)
+  #myData5 <- subset.data.frame(myData4, grepl("Yes", myData4$Keep_1copy))
+  
+  #And normalize amplicon counts on trimmed data
+  Nreads <- sum(myData5$Total_C)
+  myData5$Relative_abundance <- (myData5$Total_C/Nreads)
+  Read_counts <- cbind(ID, Nreads)
+  sapply(myData5, class)
+  
+  #Remove * on allel so it can be used for indexing, and second ID column
+  myData5$allel <- gsub('*', '', myData5$allel)
+  #myData5 <- subset(myData5, select = -c(1))
+  
+  #Well save the header and export data
+  header <- colnames(myData5)
+  
+  #Append data to dataframe All_reads
+  All_Strains <- rbind(All_Strains, myData5)
+
+  
+}
+
+#colnames(All_Strains) <- (header)
+write.table(All_Strains, "Indexed/All_strains.txt", sep='\t',  col.names=TRUE, row.names =FALSE)
+
+#Summarize the results####

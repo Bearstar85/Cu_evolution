@@ -1,0 +1,96 @@
+augustus_masked-Sm_000000F-processed-gene-19.38-mRNA-1		Sm_t00000619-RA		Sm_000000F:1888003-1893329	OK coverage
+augustus_masked-Sm_000003F-processed-gene-1.63-mRNA-1		No Maker model		Sm_000003F:153233-153798	Uneven coverage region...
+augustus_masked-Sm_000017F-processed-gene-5.128-mRNA-1		No Maker model		Sm_000017F:550727-551246	OKish coverage
+augustus_masked-Sm_000017F-processed-gene-5.129-mRNA-1		In weird model intron	Sm_000017F:562044-562817	OKish coverage
+augustus_masked-Sm_000037F-processed-gene-5.2-mRNA-1		No Maker model		Sm_000037F:485004-485888	Half coverage...
+augustus_masked-Sm_000091F-processed-gene-0.10-mRNA-1		No Maker model		Sm_000091F:87842-89219		VERY high coverage...
+augustus_masked-Sm_000091F-processed-gene-0.19-mRNA-1		No Maker model		Sm_000091F:59834-60964		VERY high coverage...
+augustus_masked-Sm_000091F-processed-gene-0.9-mRNA-1		Sm_t00021548-RA+	Sm_000091F:84490-86335		Uneven coverage region...
+genemark-Sm_000002F-processed-gene-3.20-mRNA-1			Sm_t00004218-RA		Sm_000002F:310802-314432	OK coverage
+genemark-Sm_000011F-processed-gene-7.63-mRNA-1			Sm_t00006097-RA		Sm_000011F:785524-786457	OK coverage (triploid in R05)
+genemark-Sm_000025F-processed-gene-6.14-mRNA-1			No Maker model		Sm_000025F:637791-639134	OKish coverage
+genemark-Sm_000025F-processed-gene-7.165-mRNA-1			No Maker model		Sm_000025F:690274-691447	OKish coverage
+genemark-Sm_000029F-abinit-gene-7.104-mRNA-1			No Maker model		Sm_000029F:740207-743877	OK coverage
+genemark-Sm_000054F-processed-gene-0.5-mRNA-1			Sm_t00018468-RA		Sm_000054F:3733-4164		OKish coverage
+genemark-Sm_000091F-processed-gene-0.100-mRNA-1			No Maker model		Sm_000091F:62671-63478		Uneven coverage region...
+genemark-Sm_000091F-processed-gene-0.98-mRNA-1			No Maker model		Sm_000091F:56896-58303		VERY high coverage...
+maker-Sm_000000F-augustus-gene-20.115-mRNA-1			Sm_t00000671-RA		Sm_000000F:2002696-2005638	OK coverage
+maker-Sm_000003F-snap-gene-2.76-mRNA-1				No Maker model		Sm_000003F:211167-212251	High, uneven coverage...
+maker-Sm_000030F-snap-gene-1.6-mRNA-1				Sm_t00012249-RA+	Sm_000030F:171471-172922	OK coverage
+Sm_mito_g00002							.			Sm_mitochondrion:2060-3562	OK coverage
+Sm_t00000096-RA							.			Sm_000000F:476774-478545	OK coverage
+Sm_t00000203-RA							.			Sm_000000F:797519-801365	OKish coverage
+Sm_t00000203-RAa						No Maker model		Sm_000000F:800003-800578	Half coverage...; in intron of the above
+Sm_t00000203-RAaa						No Maker model		Sm_000000F:802544-803031	Half coverage...
+Sm_t00000203-Raac						No Maker model		Sm_000000F:801718-802209	Half coverage...
+Sm_t00000271-RA							.			Sm_000000F:1015025-1017397	OK coverage
+Sm_t00000776-RA							Sm_t00000776-RA+	Sm_000000F:2248836-2249811	OK coverage
+Sm_t00000816-RA							.			Sm_000000F:2359799-2362330	OKish coverage
+Sm_t00001449-RA							.			Sm_000001F:510666-514526	OK coverage
+Sm_t00001545-RA							.			Sm_000001F:721754-725356	OK coverage
+Sm_t00001624-RA							.			Sm_000001F:918083-919516	OK coverage
+Sm_t00001766-RA							Sm_t00001766-RA-	Sm_000001F:1272694-1274769	OKish coverage
+Sm_t00002559-RA							.			Sm_000005F:1155917-1157155	OK coverage
+Sm_t00002700-RA							.			Sm_000005F:1486458-1488246	OKish coverage
+Sm_t00002911-RA							Sm_t00002911-RA-	Sm_000003F:509655-510928	OK coverage
+Sm_t00003559-RA							Sm_t00003559-RA+	Sm_000004F:348191-351016	OK coverage (part of contig is triploid in R05 but not this part)
+Sm_t00003600-RA							Sm_t00003600-RA+	Sm_000004F:466369-467923	Uneven coverage region...
+Sm_t00003600-RAa						Sm_t00003598-RA-	Sm_000004F:461534-462997	Uneven coverage region...	Check this with Björn?
+Sm_t00004040-RA							Sm_t00004040-RA-	Sm_000004F:1649746-1650989	OK coverage (triploid in R05)
+Sm_t00004185-RA							Sm_t00004185-RA-	Sm_000002F:230574-231679	OKish coverage
+Sm_t00004482-RA							.			Sm_000002F:964411-965400	OK coverage
+Sm_t00004508-RA							Sm_t00004508-RA-	Sm_000002F:1044150-1045846	OK coverage
+Sm_t00004732-RA							.			Sm_000006F:17526-18832		Half coverage...
+Sm_t00004754-RA							Sm_t00004753/4-RA+	Sm_000006F:55222-59081		OK coverage
+Sm_t00005069-RA							.			Sm_000006F:886820-888663	OK coverage
+Sm_t00005265-RA							.			Sm_000007F:851-3889		Uneven coverage region...
+Sm_t00005368-RA							.			Sm_000007F:260322-261512	OK coverage
+Sm_t00005717-RA							Sm_t00005717/8-RA	Sm_000007F:1218523-1223589	Uneven coverage region...
+Sm_t00006068-RA							Sm_t00006068-RA+	Sm_000011F:721645-723345	OK coverage (triploid in R05)
+Sm_t00007019-RA							.			Sm_000010F:738251-742041	OK coverage
+Sm_t00007046-RA							Sm_t00007046-RA+	Sm_000010F:819953-821494	OK coverage
+Sm_t00007131-RA							Sm_t00007131/2-RA-	Sm_000010F:1049371-1051648	OK coverage
+Sm_t00007630-RA							.			Sm_000008F:1013614-1015432	OK coverage (triploid in R05)
+Sm_t00007701-RA							.			Sm_000008F:1263335-1269018	Uneven coverage region...
+Sm_t00007798-RA							.			Sm_000014F:87885-91470		OK coverage
+Sm_t00007834-RA							Sm_t00007834-RA+	Sm_000014F:189712-190650	OKish coverage
+Sm_t00007866-RAa						No Maker model		Sm_000014F:303563-304247	OKish coverage
+Sm_t00008820-RA							Sm_t00008820-RA-	Sm_000015F:513437-517230	OK coverage
+Sm_t00008887-RA							Sm_t00008887-RA-	Sm_000015F:696468-697802	Uneven coverage region...
+Sm_t00009095-RA							.			Sm_000018F:107967-108767	OK coverage
+Sm_t00009272-RA							.			Sm_000018F:539593-541390	OK coverage
+Sm_t00009273-RA							Sm_t00009273-RA-	Sm_000018F:542236-545560	OK coverage
+Sm_t00009617-RA							.			Sm_000012F:565086-567371	OKish coverage
+Sm_t00009882-RA							Sm_t00009882-RA-	Sm_000013F:140436-144053	OK coverage
+Sm_t00010479-RA							Sm_t00010479-RA+	Sm_000017F:788030-790838	OK coverage
+Sm_t00010759-RA							Sm_t00010759-RA-	Sm_000028F:349856-351240	OK coverage
+Sm_t00011072-RA							.			Sm_000019F:428917-431053	OK coverage
+Sm_t00011279-RA							Sm_t00011279-RA-	Sm_000020F:75039-77264		Uneven coverage region...
+Sm_t00011280-RA							Sm_t00011280-RA+	Sm_000020F:80778-82736		Uneven coverage region...
+Sm_t00011281-RA							.			Sm_000020F:113253-115364	Uneven coverage region...
+Sm_t00011290-RA							Sm_t00011290-RA-	Sm_000020F:153786-155867	OK coverage
+Sm_t00011531-RA							Sm_t00011531-RA-	Sm_000020F:889528-890709	OK coverage
+Sm_t00012102-RA							.			Sm_000021F:687669-689012	Uneven coverage region...
+Sm_t00012258-RA							Sm_t00012257/8-RA	Sm_000030F:197610-199379	OK coverage
+Sm_t00012279-RA							Sm_t00012279-RA+	Sm_000030F:257414-257918	Half coverage...
+Sm_t00012684-RA							.			Sm_000029F:685117-685891	OK coverage
+Sm_t00013038-RA							.			Sm_000038F:85554-88398		OK coverage
+Sm_t00013427-RA							.			Sm_000024F:615849-617009	OKish coverage
+Sm_t00013510-RA							.			Sm_000024F:831975-832928	OK coverage
+Sm_t00014412-RA							Sm_t00014412-RA+	Sm_000032F:500043-502796	OKish coverage
+Sm_t00014438-RA							.			Sm_000032F:598399-600744	Half coverage...
+Sm_t00014498-RA							Sm_t00014498-RA+	Sm_000034F:37320-37899		Half coverage...
+Sm_t00014831-RA							Sm_t00014831-RA-	Sm_000037F:495305-499290	Uneven coverage region...
+Sm_t00014838-RA							.			Sm_000037F:565926-568444	OK coverage
+Sm_t00016646-RA							Sm_t00016646-RA+	Sm_000041F:368973-370335	OKish coverage
+Sm_t00017696-RA							.			Sm_000068F:242270-244498	Half coverage...
+Sm_t00018447-RA							.			Sm_000111F:128971-130612	OK coverage
+Sm_t00018460-RA							.			Sm_000111F:156229-157654	Uneven coverage region...
+Sm_t00018630-RA							.			Sm_000063F:113027-115453	Double coverage...
+Sm_t00019220-RA							.			Sm_000067F:198136-201403	OKish coverage
+snap_masked-Sm_000001F-processed-gene-6.55-mRNA-1		Sm_t00001517/8-RA	Sm_000001F:656761-658415	OK coverage
+snap_masked-Sm_000037F-processed-gene-5.87-mRNA-1		No Maker model		Sm_000037F:480391-481691	Uneven coverage region...
+snap_masked-Sm_000102F-processed-gene-0.175-mRNA-1a		No Maker model		Sm_000102F:120597-122635	Uneven coverage region...	Using the longer variant; check this with Björn
+TRINITY_DN3598_c0_g2_i2						Sm_t00007635-RA-	Sm_000008F:1028678-1031473	OK coverage
+TRINITY_DN3625_c1_g2_i1						Sm_t00001998-RA		Sm_000001F:1884070-1885881	OK coverage
+TRINITY_DN7103_c0_g2_i1						Sm_t00002462/3-RA+	Sm_000005F:966497-969695	OK coverage

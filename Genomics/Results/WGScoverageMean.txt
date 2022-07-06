@@ -1,0 +1,79 @@
+"Putative_identity_INDEX"	"Mean"	"N"	"sd"	"Min"	"Max"	"Range"
+"1"	" copper ion binding_C15"	1.2	55	0.1	0.94	1.5	0.55
+"2"	" copper ion binding_C3"	0.96	55	0.079	0.81	1.2	0.35
+"3"	"Ascorbate-dependent monooxygenase_C20"	1.1	55	0.082	0.86	1.3	0.46
+"4"	"Copper chaperone_C0"	1.1	55	0.12	0.9	1.4	0.5
+"5"	"Copper chaperone_C2"	0.97	55	0.12	0.78	1.4	0.63
+"6"	"Copper ion binding_C8"	0.98	55	0.08	0.81	1.2	0.35
+"7"	"Cu chaperone (COX11)_2"	1	55	0.1	0.78	1.3	0.56
+"8"	"Cu chaperone (COX17)_C30"	0.39	55	0.15	0.15	0.84	0.69
+"9"	"Cu chaperone (COX17)_C34"	0.57	55	0.17	0.096	1.1	0.98
+"10"	"Cu-transporting P1B-type ATPases_C1"	1.1	55	0.087	0.87	1.3	0.44
+"11"	"Cu-transporting P1B-type ATPases_C15"	1.4	55	0.42	0.91	2.4	1.5
+"12"	"Cue5-4_homolog_C102"	0.49	55	0.2	0.17	0.97	0.8
+"13"	"Cue5-4_homolog_C17"	1.7	55	0.55	0.97	3.2	2.2
+"14"	"Cue5-4_homolog_C25"	2.1	55	0.17	1.7	2.6	0.95
+"15"	"Cue5-4_homolog_C3"	3.5	55	1.5	1.2	6.7	5.5
+"16"	"Cue5-4_homolog_C37"	2.7	55	0.87	0.88	4.5	3.6
+"17"	"Cue5-4_homolog_C91"	12	55	4.2	4.3	23	18
+"18"	"Cytochrome c oxidase subunit 6B_C24"	0.87	55	0.084	0.65	1.1	0.47
+"19"	"Cytochrome c oxidase subunit I_mito"	11	55	3.6	4.9	21	16
+"20"	"Cytochrome c6 isoform A_C29"	1.9	55	0.31	1.3	3	1.6
+"21"	"Cytochrome c6 isoform B_C18"	1	55	0.16	0.64	1.6	1
+"22"	"Fe permease_C7"	0.99	55	0.11	0.66	1.3	0.61
+"23"	"Fe transporter_C30"	1.1	55	0.086	0.88	1.3	0.43
+"24"	"ferric reductases_C17"	1	55	0.11	0.72	1.2	0.52
+"25"	"ferric reductases_C63"	2.2	55	0.31	0.99	2.9	1.9
+"26"	"ferric reductases_C67"	1.1	55	0.08	0.92	1.3	0.35
+"27"	"Girdel-band-assosciated cell surface protein_C18"	1.1	55	0.077	0.84	1.3	0.42
+"28"	"glutamate-cysteine ligase_C29"	1.1	55	0.087	0.94	1.5	0.58
+"29"	"glutathione synthetase_C20"	1.5	55	0.13	1.1	1.8	0.66
+"30"	"high-affinity Cu transporter_C10"	1.1	55	0.097	0.86	1.3	0.46
+"31"	"high-affinity Cu transporter_C2"	1	55	0.11	0.82	1.3	0.45
+"32"	"L-ascorbate oxidase_C32"	1.3	55	0.22	0.49	1.6	1.2
+"33"	"Metal cheleator_Cue10_C14"	1.1	55	0.083	0.93	1.3	0.34
+"34"	"Metal cheleator_Cue10_C4"	1	55	0.066	0.87	1.2	0.36
+"35"	"Metal cheleator_Cue6-7_C0"	1.6	55	0.34	1	2.5	1.5
+"36"	"Metal cheleator_Cue6-7_C14"	2	55	0.46	1.3	4	2.7
+"37"	"metallopeptidase activity_C0"	0.98	55	0.067	0.81	1.1	0.32
+"38"	"metallopeptidase activity_C1"	1.1	55	0.067	0.93	1.2	0.28
+"39"	"metallopeptidase activity_C7"	1.3	55	0.094	1.1	1.5	0.38
+"40"	"Metallothionein-like protein_C0"	2	55	0.14	1.6	2.2	0.62
+"41"	"Metallothionein-like protein_C10"	1	55	0.097	0.8	1.3	0.48
+"42"	"Metallothionein-like protein_C11"	1	55	0.09	0.8	1.3	0.48
+"43"	"Metallothionein-like protein_C19"	1	55	0.074	0.8	1.1	0.35
+"44"	"Metallothionein-like protein_C25"	1	55	0.064	0.89	1.2	0.29
+"45"	"Metallothionein-like protein_C30"	0.87	55	0.093	0.7	1.1	0.39
+"46"	"Metallothionein-like protein_C54"	1.3	55	0.32	0.7	2	1.3
+"47"	"Metallothionein-like protein_C6"	1.1	55	0.068	0.93	1.2	0.25
+"48"	"Multicopper oxidase (FET3)_C10"	1	55	0.095	0.85	1.4	0.53
+"49"	"Multicopper oxidase (L-ascorbate oxidase)_C32"	0.64	55	0.17	0.1	1	0.93
+"50"	"Multicopper oxidase (Laccase)_C38"	1	55	0.07	0.88	1.3	0.39
+"51"	"Multicopper oxidase-like (SufI)_C1"	1	55	0.093	0.8	1.3	0.52
+"52"	"Multicopper oxidase-like (SufI)_C37"	1.3	55	0.35	0.43	2.4	2
+"53"	"Multicopper oxidase-like (SufI)_C7"	3	55	0.78	1.7	5.8	4.1
+"54"	"Multicopper oxidase-like (SufI)_C8"	0.97	55	0.14	0.66	1.3	0.65
+"55"	"Multimetal transporter (FieF)_C12"	0.95	55	0.08	0.78	1.2	0.42
+"56"	"Multimetal transporter (ZIP)_C0"	0.9	55	0.087	0.69	1.1	0.38
+"57"	"Multimetal transporter (ZIP)_C1"	1.9	55	0.13	1.7	2.2	0.49
+"58"	"Multimetal transporter (ZIP)_C111"	1	55	0.16	0.83	1.9	1
+"59"	"Multimetal transporter (ZIP)_C21"	0.93	55	0.097	0.7	1.1	0.44
+"60"	"Multimetal transporter (ZIP)_C28"	0.97	55	0.093	0.78	1.1	0.35
+"61"	"Multimetal transporter (ZIP)_C4"	0.26	50	0.27	0.0015	0.7	0.7
+"62"	"Multimetal transporter (ZIP)_C41"	1.1	55	0.28	0.51	1.8	1.3
+"63"	"Multimetal transporter (ZIP)_C5"	1.8	55	0.16	1.4	2.3	0.88
+"64"	"Multimetal transporter (ZIP)_C61"	1	55	0.088	0.8	1.2	0.39
+"65"	"NADH dehydrogenase_C2"	0.98	55	0.17	0.74	1.9	1.1
+"66"	"NADH-ubiquinone oxidoreductase_C11"	1	55	0.089	0.8	1.2	0.45
+"67"	"NADH-ubiquinone oxidoreductase_C24"	0.8	55	0.081	0.57	1	0.42
+"68"	"NADH:ubiquinone oxidoreductase_C20"	1.1	55	0.088	0.96	1.3	0.33
+"69"	"Non-ribosomal peptide synthetase_C13"	1.1	55	0.076	0.94	1.3	0.37
+"70"	"pathogenesis-related-1 homolog_C37"	1	55	0.14	0.85	1.8	0.95
+"71"	"pathogenesis-related-1 homolog_C4"	2.1	55	0.18	1.8	2.5	0.78
+"72"	"pathogenesis-related-1 homolog_C6"	1	55	0.089	0.82	1.2	0.4
+"73"	"Phytochelatin synthase_C111"	0.55	55	0.081	0.41	0.8	0.39
+"74"	"Phytochelatin synthase_C6"	0.48	55	0.07	0.35	0.64	0.29
+"75"	"Phytochelatin synthase_C8"	1.1	55	0.086	0.79	1.2	0.42
+"76"	"Phytochelatin synthase-like_C1"	1.1	55	0.12	0.84	1.6	0.77
+"77"	"Ribonucleotide reductase, alpha subuni_C0"	0.99	55	0.073	0.8	1.2	0.36
+"78"	"Unknown_cue14_C18"	1.1	55	0.087	0.86	1.3	0.41
