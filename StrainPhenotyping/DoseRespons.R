@@ -5,11 +5,9 @@ getwd()
 #and set the work directory in case we have moved around or opened another project
 setwd("~/Users/xanbjg/Documents/R/Cu_evolution/StrainPhenotyping")
 dir()
+#Script requires sub-directories named Input, Plots, and Results, below the work directory
 
-# loading packages containing functions. Access the functions that these contain.
-# check if you have these under packages
-# you probably don't have it so you have to install it before. Everytime I start R studio
-# I have to run these librarys. 
+# loading packages
 
 #packages & functions
 library(drc)
@@ -32,10 +30,10 @@ library(ggpubr)
 library(gridExtra)
 #library(ggpmisc)
 library(gplots)
-#library(staplr)
 library(staplr)
 library(dplyr)
 
+#Read in and format data####
 
 #first create individual .csv files based on .csv containing data of all strains
 GP_Cunorm <- read.csv2("Input/GP_lowCu_norm.csv")
@@ -43,7 +41,7 @@ VG_Cunorm <- read.csv2("Input/VG_lowCu_norm.csv")#, header=FALSE
 All <- rbind(GP_Cunorm, VG_Cunorm)
 sapply(All, class)
 All$Concentration <- as.numeric(as.character(All$Concentration))
-All$Growth_rate_.day.1. <- as.numeric(as.character(All$Growth_rate_.day.1.))
+All$Growth_rate <- as.numeric(as.character(All$Growth_rate))
 All$Inhibition <- as.numeric(as.character(All$Inhibition))
 
 #Transform Concentration from numerical to absolute Cu concentration based on ISP-MS measurments
@@ -57,7 +55,7 @@ GPstrain<- unique(GP$strain)
 VG <- subset.data.frame(All, grepl("VG", All$Local))
 VGstrain<- unique(VG$strain)
 #Lets make an Dataframe to save all ratios in
-#AlleleRatios <- as.data.frame("x", header('ID', "Barcode1_RA", "Barcode2_RA", "AllelRatio"))
+
 DRCs <- data.frame(Strain=character(),
                            Predict=numeric(),
                            Predict_low=numeric(),
@@ -257,8 +255,8 @@ write.table(DRCs, file = "Results/ECvaluesStrains.txt", sep = '\t', col.names = 
 DRCs2 <- DRCs2 %>% mutate_at(c(2:16), as.numeric)
 sapply(DRCs2 , class)
 
-#Graphs and modeling####
-StrainMeta <- read.delim("Strain_summary.txt", sep = '\t', header=TRUE)
+#Graphs####
+StrainMeta <- read.delim("Input/Strain_summary.txt", sep = '\t', header=TRUE)
 DRC_Meta <- join(DRCs2, StrainMeta, by = "Strain", type = "right")
 sapply(DRC_Meta , class)
 
@@ -374,12 +372,12 @@ dev.off()
 #Good, now i want a histogram of both populations
 Fig1B <- ggplot(DRC_Meta, aes(x=EC50, fill=Population, color=Population)) +
   geom_histogram(bins = 30, alpha=0.7, position="identity", color="black") + #aes(y = ..density..)
-  #geom_density(alpha=0.7) +
+  geom_density(alpha=0.7) +
   scale_color_manual(values=c("gray14", "#B85633"), labels = c("Reference inlet", "Mining inlet")) +
   scale_fill_manual(values=c("gray14", "#B85633"), labels = c("Reference inlet", "Mining inlet")) +
   #scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9"))
   coord_cartesian(xlim=c(6, 10.1), ylim=c(0,8), expand = F) + #ylim=c(-10000,+10000)
-  scale_x_discrete(limits=c(6,7,8,9,10)) +
+  #scale_x_discrete(limits=c(6,7,8,9,10)) +
   labs(x=expression("EC50 (" *mu ~ "M Cu)"), y = "Number of strains", title = "A") +
   background_grid(major = "none", minor = "none") + # add thin horizontal lines
   panel_border(colour = "black", size = 2) + # and a border around each panel
@@ -459,16 +457,16 @@ print(Fig1Bv2)
 dev.copy(pdf, "Plots/Fig1v2B.pdf")
 dev.off()
 
-#Lets also make one with Growth_rate_.day.1.
+#Lets also make some one with Growth_rate.
 sapply(DRC_Meta , class)
 Fig1E <- ggplot(DRC_Meta, aes(x=Growth_Rate, fill=Population, color=Population)) +
   geom_histogram(bins = 30, alpha=0.5, position="identity", aes(y = ..density..), color="black") + #aes(y = ..density..)
   geom_density(alpha=0.7) +
   scale_color_manual(values=c("gray14", "#B85633"), labels = c("Reference inlet", "Mining inlet")) +
-  scale_fill_manual(values=c("gray14", "#B85633"), , labels = c("Reference inlet", "Mining inlet")) +
+  scale_fill_manual(values=c("gray14", "#B85633"), labels = c("Reference inlet", "Mining inlet")) +
   #scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9"))
   coord_cartesian(xlim=c(0, 2), ylim=c(0,5), expand = F) + #ylim=c(-10000,+10000)
-  scale_x_discrete(limits=c(0,0.5,1,1.5,2)) +
+  #scale_x_discrete(limits=c(0,0.5,1,1.5,2)) +
   labs(x=expression("Growth rate"~(day^{-1})), y = "Strain density", title = "E") +
   background_grid(major = "none", minor = "none") + # add thin horizontal lines
   panel_border(colour = "black", size = 2) + # and a border around each panel
@@ -563,7 +561,7 @@ t_Rate
 
 #Lets try to also plot growth curves with density plot
 
-Density <- read.delim("Input/GrowthCurveExamples.txt", sep = '\t', header=TRUE)
+Density <- read.delim("Input/GrowthCurveExamples.csv", sep = ';', header=TRUE)
 sapply(Density , class)
 
 GP_RFU <- subset.data.frame(Density, grepl("GP", Density$Population))
@@ -718,17 +716,12 @@ unique(P_density3$pop)
 unique(P_density3$Treatment)
 #Lets work on modeling growth rate and changes in density of each strain
 
-
-#Plot data to make sure it looks ok
+#Plot data to make sure it looks ok. This is what would happen to microbes in an universe with infinite resourcse.
 ggplot(data = P_density3, aes(x = t, y = P_density)) +
   geom_point() +
   scale_y_continuous(trans = "log10") #change the scale on y axis
 
-##Strain selection graphs#####
-
 #Lets first pedict pop evolution in growth rate
-#StrainsO <- cbind(GP_density2, VG_density2)
-#longDataO <-melt(StrainsO)
 
 library(RColorBrewer)
 n <- 58
@@ -770,10 +763,6 @@ dev.copy(pdf, "Plots/Fig2.C.pdf")
 dev.off()
 
 #Next step now is to do the same but for the barcode quantification of strains
-
-################
-
-#Predicting evolution of growth rate####
 
 #Combine populations  biomass (cells rep)
 GP_density <- subset.data.frame(P_density3, grepl("GP", P_density3$pop))
@@ -870,9 +859,8 @@ FigSx.C
 
 dev.copy(pdf, "Plots/FigSx.pdf")
 dev.off()
-##################
 
-#Stats fro MAnuscript
+#Stats for Manuscript
 
 t_EC
 t_Rate

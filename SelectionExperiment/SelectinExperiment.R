@@ -3,13 +3,8 @@
 rm(list=ls())
 getwd()
 #and set the work directory in case we have moved around or opened another project
-setwd("~/Users/xanbjg/Documents/R/Cu_evolution/Genomics")
+setwd("~/Documents/R/Cu_evolution/SelectionExperiment")
 dir()
-
-# loading packages containing functions. Access the functions that these contain.
-# check if you have these under packages
-# you probably don't have it so you have to install it before. Everytime I start R studio
-# I have to run these librarys. 
 
 #packages & functions
 library(drc)
@@ -39,6 +34,7 @@ library(naniar)
 #install.packages("naniar")
 #Read in data####
 Barcoding <- read.table(file = "Input/All_strains.txt", sep = '\t', header = TRUE)
+Strain <-  subset.data.frame(Barcoding, grepl("GP2-4_57", Barcoding$Strain))
 sapply(Barcoding, class)
 
 #Remove the strain samples
@@ -47,10 +43,27 @@ Barcoding2 <- subset.data.frame(Barcoding, grepl('VG|GP', Barcoding$Experiment))
 Barcoding_Avarages <- ddply(Barcoding2, c("Population", "Treatment", "Timepoint", "Strain"), summarise,
                      mean = mean(Relative_abundance), sd = sd(Relative_abundance ))
 
+#Count the occurrences of the wrong strain in the wrong population (False positives)
+VGs <- subset.data.frame(Barcoding2, grepl('VG', Barcoding2$Strain))
+VGs <- subset.data.frame(VGs, grepl('GP', VGs$Experiment))
+VG_FP<- length(VGs$Population[VGs$Total_C > 0])
+
+GPs <- subset.data.frame(Barcoding2, grepl('GP', Barcoding2$Strain))
+GPs <- subset.data.frame(GPs, grepl('VG', GPs$Experiment))
+GP_FP<- length(GPs$Population[GPs$Total_C > 0])
+
+#The number of indisputable false positives is
+VG_FP+GP_FP
+
+#FDR rate can be computes as (0.07), since we only see half of theoretical FP:
+AllObs <- length(Barcoding2$Population[Barcoding2$Total_C > 0]) 
+AllObs
+(VG_FP+GP_FP)/(AllObs/2)
+
 #Remove RO5 samples
 Barcoding_Avarages2 <- subset.data.frame(Barcoding_Avarages, grepl('VG|GP', Barcoding_Avarages$Population))
 
-#lets also Remove RO5AC from samples
+#lets also Remove RO5AC observations from other samples
 unique(Barcoding_Avarages2$Treatment)
 Barcoding_Avarages2 <- subset.data.frame(Barcoding_Avarages2, !grepl('RO5AC', Barcoding_Avarages2$Strain))
 
@@ -59,27 +72,20 @@ Clone0 <- subset.data.frame(Barcoding_Avarages2, grepl('0', Barcoding_Avarages2$
 Clone0$Treatment <- recode_factor(Clone0$Treatment, "Control" = "Copper")
 Barcoding_Avarages2 <- rbind(Barcoding_Avarages2, Clone0)
 
-#Need to add GP GP2-4_45dummy label to make color match with model
-#DummyStrain <- subset.data.frame(Barcoding_Avarages2, grepl('GP2-4_45and46', Barcoding_Avarages2$Strain))
-#DummyStrain$Strain <- recode_factor(DummyStrain$Strain, "GP2-4_45and46" = "GP2-4_46dummy")
-#DummyStrain$mean <- DummyStrain$mean*0
-#DummyStrain$sd <- DummyStrain$sd*0
-#Barcoding_Avarages2 <- rbind(Barcoding_Avarages2, DummyStrain)
-##Strain selection graphs#####
-#Mimicing the models result
-
-#Lets first pedict pop evolution in growth rate
-#StrainsO <- cbind(GP_density2, VG_density2)
-#longDataO <-melt(StrainsO)
-
+#Make colors for strains
 library(RColorBrewer)
 n <- 58
+Mock <- rep(1,n)
+S <- sort(unique(Barcoding2$Strain))
+S
+names(Mock) <- S
+Mock <- Mock[! names(Mock) %in% c('RO5AC')]
 qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
 col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
-pie(rep(1,n), col=sample(col_vector, n))
 
 #Lets make it all in one graph
 sapply(Barcoding_Avarages2, class)
+unique(Barcoding_Avarages2$Timepoint)
 Barcoding_Avarages2$Timepoint <- as.numeric(as.character(Barcoding_Avarages2$Timepoint))
 
 Fig2.D <- ggplot(data = Barcoding_Avarages2, aes(x = Timepoint, y = mean , fill=Strain)) + geom_area(position='fill') +
@@ -115,10 +121,6 @@ dev.off()
 
 #Next step now is to do the same but for the barcode quantification of strains
 
-#Predicting evolution of growth rate####
-
-#Okey now we want to compute fitness for all strains using the barcoding quantification on day 9 of experiment
-
 #Phenotyping using metabarcoding####
 
 #Okey now we want to compute fitness for all strains using the barcoding quantification on day 9 of experiment
@@ -138,8 +140,8 @@ Barcoding_fitness_GP <- subset.data.frame(Barcoding_fitness_GP, grepl("GP2-4*", 
 Barcoding_fitness_VG <- subset.data.frame(Barcoding_fitness, grepl('VG', Barcoding_fitness$Population))
 Barcoding_fitness_VG <- subset.data.frame(Barcoding_fitness_VG, grepl("VG1-2*", Barcoding_fitness_VG$Strain))
 Barcoding_fitness <- rbind(Barcoding_fitness_GP, Barcoding_fitness_VG)
-#We loost the t0 data and need to get this back into all samples as the start conc.
-#Lets use the avarages from the MM reps and selecting the right pop.
+#We lost the t0 data and need to get this back into all samples as the start conc.
+#Lets use the averages from the MM reps and selecting the right pop.
 Time0 <- subset.data.frame(Barcoding_Avarages2, grepl('0', Barcoding_Avarages2$Timepoint))
 Time0_GP <- subset.data.frame(Time0, grepl('GP', Time0$Population))
 Time0_GP <- subset.data.frame(Time0_GP, grepl('Control', Time0_GP$Treatment))
@@ -211,8 +213,8 @@ for (i in f) {
       ~ case_when(
         # +Inf becomes the finite max.
         . ==  Inf ~ max(.[is.finite(.)]),
-        # -Inf becomes the finite min.
-        . == -Inf ~ min(.[is.finite(.)]),
+        # -Inf becomes NA (change to the finite min: min(.[is.finite(.)])
+        . == -Inf ~ NA,
         # Other values stay the same.
         TRUE      ~ .
       )
@@ -225,17 +227,22 @@ for (i in f) {
 #Good, now we can sort out NULL observations using Observation column (or use the min detection limit in DummyDF)
 DummyDF2 <- subset.data.frame(DummyDF, grepl('Yes', DummyDF$Observations))
 
+#How many missing datapoints/observations do we have (34% or N=159)
+(nrow(DummyDF)-nrow(DummyDF2))/nrow(DummyDF)
+nrow(DummyDF)-nrow(DummyDF2)
+nrow(DummyDF)
 #Lets extract averages per population below, There are options here!!!
 #omitting this step will plot all datapoints instead (use Barcoding_fitness3)
 #Use DummyDF2 to remove datapoints with 0 reads observed
-#use DummyDF to replace 0 reads observations with the detection limit per sample
-
+#use DummyDF to ignore NAs or replace 0 reads observations with the detection limit per sample
 Barcoding_Fitness_Avarages <- ddply(DummyDF, c("Population", "Treatment", "Strain"), summarise,
-                                    Barcode_mean = mean(Barcode_rate), Barcode_N = n(), 
-                                    Barcode_High = mean(Barcode_rate)+2*sd(Barcode_rate)/sqrt(n()), 
-                                    Barcode_Low = mean(Barcode_rate)-2*sd(Barcode_rate)/sqrt(n()))
+                                    Barcode_mean = mean(Barcode_rate, na.rm = T), Barcode_N = sum(!is.na(Barcode_rate)),
+                                    Barcode_High = mean(Barcode_rate, na.rm = T)+2*sd(Barcode_rate, na.rm = T)/sum(!is.na(Barcode_rate)),
+                                    Barcode_Low = mean(Barcode_rate, na.rm = T)-2*sd(Barcode_rate, na.rm = T)/sum(!is.na(Barcode_rate)))
 
-#Here we can proceed using Barcoding_fitness3 for all data points, or Barcoding_Fitness_Avarages
+
+
+#Here we can proceed using Barcoding_fitness3 for all data points, or Barcoding_Fitness_Avarages for mean
 #Barcoding_fitness3_Cu <- subset.data.frame(Barcoding_fitness3, grepl('Copper', Barcoding_fitness3$Treatment))
 #Barcoding_fitness3_C <- subset.data.frame(Barcoding_fitness3, grepl('Control', Barcoding_fitness3$Treatment))
 unique(Barcoding_Fitness_Avarages$Treatment)
@@ -248,34 +255,27 @@ sapply(Observed_Rate, class)
 Cu_Rate <- read.table(file = "Input/Cu_predicted_rate.txt", sep = '\t', header = TRUE)
 sapply(Observed_Rate, class)
 
+#The 95 conf interval is on avarage 0.038 day-1 for Barcoded rates
+mean(Barcoding_Fitness_Avarages$Barcode_mean-Barcoding_Fitness_Avarages$Barcode_Low, na.rm = T)
+
+#And day-1 for Mono rates
+mean(Observed_Rate$Growth_Rate-Observed_Rate$Low, na.rm = T)
+
 Barcoding_fitness3_Cu <- join(Barcoding_fitness3_Cu, Cu_Rate, by = "Strain", type = "left")
 Barcoding_fitness3_C <- join(Barcoding_fitness3_C, Observed_Rate, by = "Strain", type = "left")
 dim(Barcoding_fitness3_Cu)
 dim(Barcoding_fitness3_C)
+
+#count how many strains with Max (1 or 5), 4, 3, 2, 1 and 0 obs we have.
+#one treatment has only 1 rep, so histogram cant count that as full strain score
+histogram(Barcoding_Fitness_Avarages$Barcode_N)
+#For Cu 22, 8, 6, 7, 4, 8
+55-(22+8+6+7+4)
+#For C 32, 10, 8, 2, 1, 2
+55-(32+10+8+2+1)
+
 Barcoding_fitness4 <- rbind(Barcoding_fitness3_C, Barcoding_fitness3_Cu)
 
-
-
-#Need to clone start values to Cu
-#Clone0 <- subset.data.frame(Barcoding_Avarages2, grepl('0', Barcoding_Avarages2$Timepoint))
-#Clone0$Treatment <- recode_factor(Clone0$Treatment, "Control" = "Copper")
-#Barcoding_Avarages2 <- rbind(Barcoding_Avarages2, Clone0)
-
-#Need to add GP GP2-4_45dummy label to make color match with model, and RO5AC
-#DummyStrain <- subset.data.frame(Barcoding_fitness4, grepl('GP2-4_45and46', Barcoding_fitness4$Strain))
-#DummyStrain$Strain <- recode_factor(DummyStrain$Strain, "GP2-4_45and46" = "GP2-4_46dummy")
-#DummyR05 <- subset.data.frame(Barcoding_fitness4, grepl('GP2-4_45and46', Barcoding_fitness4$Strain))
-#DummyR05$Strain <- recode_factor(DummyR05$Strain, "GP2-4_45and46" = "RO5AC")
-#sapply(DummyR05, class)
-
-#lets delete data from RO5ac
-#DummyR05[, 15:41][DummyR05[, 15:41] > 0] <- 0
-#DummyR05[, 15:41][DummyR05[, 15:41] < 0] <- 0
-#DummyR05 %>% replace(is.na(.), 0)
-
-#And add datasets
-#Barcoding_fitness5 <- rbind(Barcoding_fitness4, DummyStrain, DummyR05)
-#unique(Barcoding_fitness5$Strain)
 
 OneStrain <- subset.data.frame(Barcoding_fitness4, grepl('GP2-4_26', Barcoding_fitness4$Strain))
 plot(OneStrain$Barcode_mean~OneStrain$Growth_Rate)
@@ -283,12 +283,13 @@ sapply(OneStrain, class)
 
 #Compute mean and sd per treatment using diffrent phenotyping approches
 Barcoding_fitness5 <- Barcoding_fitness4[complete.cases(Barcoding_fitness4[,8:10]), ]
+
 Pop_Avarages_barcode <- ddply(Barcoding_fitness5, c("Population", "Treatment"), summarise,
                                     Barcode_Mean = mean(Barcode_mean), Barcode_N = n(), Barcode_sd = sd(Barcode_mean))  
 Pop_Avarages_predicted <- ddply(Barcoding_fitness5, c("Population", "Treatment"), summarise,
                       Predicted_mean = mean(Growth_Rate), Barcode_N = n(), Predicted_sd = sd(Growth_Rate))  
 
-Fig3B <- ggplot(Barcoding_fitness4, aes(Growth_Rate, Barcode_mean)) +
+Fig3B <- ggplot(Barcoding_fitness4, aes(Growth_Rate, Barcode_mean)) + #Change Barcode_mean to Barcode_rate for ind. reps
   facet_grid(rows = vars(Population), cols = vars(Treatment)) +
   geom_point(mapping = aes(color = Strain), size = 3, shape=1, stroke = 0.7) + #shape = Trea
   #geom_jitter(mapping = aes(color = Strain), size = 4, shape=1, width = 0.05) + #shape = Trea
@@ -336,7 +337,7 @@ Fig3B <- ggplot(Barcoding_fitness4, aes(Growth_Rate, Barcode_mean)) +
 
 
 print(Fig3B)
-dev.copy(pdf, "Plots/Fig3b.pdf")
+dev.copy(pdf, "Plots/Fig3B.pdf")
 dev.off()
 
 #Lets save this data to correlate genomic features against
@@ -381,6 +382,7 @@ print(Fig1A)
 dev.copy(pdf, "Plots/Fig1A.pdf")
 dev.off()
 
+min(Barcoding_fitness4$Barcode_mean, na.rm = T)
 Fig1B <- ggplot(Barcoding_fitness4, aes(x=Barcode_mean, fill=Population, color=Population)) +
   facet_grid(rows = vars(Treatment)) +
   geom_histogram(bins = 30, alpha=0.5, position="identity", aes(y = ..density..), color="black") + #aes(y = ..density..)
@@ -389,7 +391,7 @@ Fig1B <- ggplot(Barcoding_fitness4, aes(x=Barcode_mean, fill=Population, color=P
   scale_fill_manual(values=c("gray14", "#B85633")) +
   #scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9"))
   #coord_cartesian(xlim=c(6, 10.1), ylim=c(0,2.5), expand = F) + #ylim=c(-10000,+10000)
-  #scale_x_discrete(limits=c(6,7,8,9,10)) +
+  #scale_x_discrete(limits=c(-0.5, 0, 0.5, 1, 1.5, 2)) +
   labs(x=expression("Growth rate"~(day^{-1})), y = "Strain density", title = "B) Observed") +
   background_grid(major = "none", minor = "none") + # add thin horizontal lines
   panel_border(colour = "black", size = 2) + # and a border around each panel
@@ -490,12 +492,92 @@ print(Fig2A)
 dev.copy(pdf, "Plots/Fig2A.pdf")
 dev.off()
 
-FigSx2 <- ggplot(FvFm, aes(Timepoint, Mean)) +
+Fig2A <- ggplot(Rate, aes(Timepoint, Mean)) +
   facet_grid(cols = vars(Experiment)) + # , rows = vars(Parameter),  +
   geom_point(mapping = aes(color = interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 2, shape=16, stroke = 0.7) + #shape = Trea
   geom_errorbar(aes(ymin = Low, ymax = High, width=1, color = interaction(Treatment,Population,sep="-",lex.order=TRUE))) +
   geom_line(mapping = aes(colour = interaction(Treatment,Population,sep="-",lex.order=TRUE), linetype=interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 1) + #Fits polynomal function to data (can be changed to lm: https://plotly.com/ggplot2/stat_smooth/) and https://stackoverflow.com/questions/31829528/specify-regression-line-intercept-r-ggplot2
   scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
+  scale_linetype_manual(values = c(1,2,1,1,2,1)) +
+  coord_cartesian(xlim=c(-1, 46), ylim=c(-0.5, 2.2), expand = F) + #ylim=c(-10000,+10000)
+  #scale_x_discrete(limits=c(-0.5, 0 ,0.5, 1, 1.5, 2)) +
+  scale_y_discrete(limits=c(-0.5, 0, 0.5, 1, 1.5, 2)) +
+  #annotation_logticks(sides = "l") + # adds linier tickmarks
+  #coord_cartesian(ylim=c(-4,4), expand = F) + #changes the y axis
+  #theme(axis.text.x = element_text(angle = 45, hjust = 1)) + #adjust text tilt and possition
+  background_grid(major = "none", minor = "none") + # add thin horizontal lines
+  panel_border(colour = "black", size = 1) + # and a border around each panel
+  labs (x="Time (days)", y=expression("Growth rate "~(day^{-1})), title = "") +
+  theme(plot.title = element_text(vjust = - 35, hjust = 0.04)) +
+  theme(panel.spacing = unit(0.2, "lines")) +
+  theme(legend.title=element_blank()) +
+  theme(legend.text=element_text(size=15)) +
+  theme(text=(element_text(size=15))) +
+  theme(axis.text=(element_text(size=15, colour = "Black"))) +
+  theme(panel.background = element_blank()) +
+  theme(legend.key = element_blank()) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(aspect.ratio=1) +
+  theme(strip.background =element_rect(fill='white')) +
+  theme(legend.position = "top", 
+        legend.spacing.x=unit(0.1, "cm"),
+        legend.spacing.y=unit(0, "cm"),
+        legend.key.width = unit(1.5,"cm"),
+        legend.box.background = element_rect(fill='white'))
+#guides(fill=guide_legend(nrow = 3), color = guide_legend(override.aes = list(size = 1)))
+#guides(fill=guide_legend(ncol=2), color = guide_legend(override.aes = list(length=1))) #color = guide_legend(override.aes = list(length=1))
+
+print(Fig2A)
+dev.copy(pdf, "Plots/Fig2A.pdf")
+dev.off()
+
+#Lets make a version of the Rate for the supplement instead
+FigSx1 <- ggplot(Rate, aes(Timepoint, Mean)) +
+  facet_grid(cols = vars(Experiment)) + # , rows = vars(Parameter),  +
+  geom_point(mapping = aes(color = interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 2, shape=16, stroke = 0.7) + #shape = Trea
+  geom_errorbar(aes(ymin = Low, ymax = High, width=1, color = interaction(Treatment,Population,sep="-",lex.order=TRUE))) +
+  geom_line(mapping = aes(colour = interaction(Treatment,Population,sep="-",lex.order=TRUE), linetype=interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 1) + #Fits polynomal function to data (can be changed to lm: https://plotly.com/ggplot2/stat_smooth/) and https://stackoverflow.com/questions/31829528/specify-regression-line-intercept-r-ggplot2
+  scale_color_manual(values=c("gray14", "#008000", "#B85633", "azure4", "dodgerblue1", "darkgoldenrod2")) + #aesthetics = c("colour", "fill")) +
+  geom_hline(yintercept = 0, color="black") +
+  scale_linetype_manual(values = c(1,2,1,1,2,1)) +
+  coord_cartesian(xlim=c(-1, 43), ylim=c(-0.5, 2.2), expand = F) + #ylim=c(-10000,+10000)
+  #scale_x_discrete(limits=c(-0.5, 0 ,0.5, 1, 1.5, 2)) +
+  scale_y_discrete(limits=c(-0.5, 0, 0.5, 1, 1.5, 2)) +
+  #annotation_logticks(sides = "l") + # adds linier tickmarks
+  #coord_cartesian(ylim=c(-4,4), expand = F) + #changes the y axis
+  #theme(axis.text.x = element_text(angle = 45, hjust = 1)) + #adjust text tilt and possition
+  background_grid(major = "none", minor = "none") + # add thin horizontal lines
+  panel_border(colour = "black", size = 1) + # and a border around each panel
+  labs (x="Time (days)", y=expression("Growth rate "~(day^{-1})), title = "") +
+  theme(plot.title = element_text(vjust = - 35, hjust = 0.04)) +
+  theme(panel.spacing = unit(0.2, "lines")) +
+  theme(legend.title=element_blank()) +
+  theme(legend.text=element_text(size=12)) +
+  theme(text=(element_text(size=12))) +
+  theme(axis.text=(element_text(size=12, colour = "Black"))) +
+  theme(panel.background = element_blank()) +
+  theme(legend.key = element_blank()) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(aspect.ratio=0.5) +
+  theme(strip.background =element_rect(fill='white')) +
+  theme(legend.position = "top", 
+        legend.spacing.x=unit(0.1, "cm"),
+        legend.spacing.y=unit(0, "cm"),
+        legend.key.width = unit(1.5,"cm"),
+        legend.box.background = element_rect(fill='white'))
+#guides(fill=guide_legend(nrow = 3), color = guide_legend(override.aes = list(size = 1)))
+#guides(fill=guide_legend(ncol=2), color = guide_legend(override.aes = list(length=1))) #color = guide_legend(override.aes = list(length=1))
+
+print(FigSx1)
+dev.copy(pdf, "Plots/FigSx1.pdf")
+dev.off()
+
+FigSx2 <- ggplot(FvFm, aes(Timepoint, Mean)) +
+  facet_grid(cols = vars(Experiment)) + # , rows = vars(Parameter),  +
+  geom_point(mapping = aes(color = interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 2, shape=16, stroke = 0.7) + #shape = Trea
+  geom_errorbar(aes(ymin = Low, ymax = High, width=1, color = interaction(Treatment,Population,sep="-",lex.order=TRUE))) +
+  geom_line(mapping = aes(colour = interaction(Treatment,Population,sep="-",lex.order=TRUE), linetype=interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 1) + #Fits polynomal function to data (can be changed to lm: https://plotly.com/ggplot2/stat_smooth/) and https://stackoverflow.com/questions/31829528/specify-regression-line-intercept-r-ggplot2
+  scale_color_manual(values=c("gray14", "#008000", "#B85633", "azure4", "dodgerblue1", "darkgoldenrod2")) + #aesthetics = c("colour", "fill")) +scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
   scale_linetype_manual(values = c(1,2,1,1,2,1)) +
   coord_cartesian(xlim=c(-1, 43), ylim=c(0, 1), expand = F) + #ylim=c(-10000,+10000)
   #scale_x_discrete(limits=c(-0.5, 0 ,0.5, 1, 1.5, 2)) +
@@ -534,9 +616,10 @@ FigSx3 <- ggplot(pH, aes(Timepoint, Mean)) +
   geom_point(mapping = aes(color = interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 2, shape=16, stroke = 0.7) + #shape = Trea
   geom_errorbar(aes(ymin = Low, ymax = High, width=1, color = interaction(Treatment,Population,sep="-",lex.order=TRUE))) +
   geom_line(mapping = aes(colour = interaction(Treatment,Population,sep="-",lex.order=TRUE), linetype=interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 1) + #Fits polynomal function to data (can be changed to lm: https://plotly.com/ggplot2/stat_smooth/) and https://stackoverflow.com/questions/31829528/specify-regression-line-intercept-r-ggplot2
-  scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
+  scale_color_manual(values=c("gray14", "#008000", "#B85633", "azure4", "dodgerblue1", "darkgoldenrod2")) + #aesthetics = c("colour", "fill")) +scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
   scale_linetype_manual(values = c(1,2,1,1,2,1)) +
   coord_cartesian(xlim=c(-1, 43), ylim=c(7, 9), expand = F) + #ylim=c(-10000,+10000)
+  geom_hline(yintercept = 8.2, color="black") +
   #scale_x_discrete(limits=c(-0.5, 0 ,0.5, 1, 1.5, 2)) +
   scale_y_discrete(limits=c(7, 7.5, 8, 8.5, 9)) +
   #annotation_logticks(sides = "l") + # adds linier tickmarks
@@ -573,7 +656,7 @@ FigSx4 <- ggplot(RFU, aes(Timepoint, Mean)) +
   geom_point(mapping = aes(color = interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 2, shape=16, stroke = 0.7) + #shape = Trea
   geom_errorbar(aes(ymin = Low, ymax = High, width=1, color = interaction(Treatment,Population,sep="-",lex.order=TRUE))) +
   geom_line(mapping = aes(colour = interaction(Treatment,Population,sep="-",lex.order=TRUE), linetype=interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 1) + #Fits polynomal function to data (can be changed to lm: https://plotly.com/ggplot2/stat_smooth/) and https://stackoverflow.com/questions/31829528/specify-regression-line-intercept-r-ggplot2
-  scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
+  scale_color_manual(values=c("gray14", "#008000", "#B85633", "azure4", "dodgerblue1", "darkgoldenrod2")) + #aesthetics = c("colour", "fill")) +scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
   scale_linetype_manual(values = c(1,2,1,1,2,1)) +
   coord_cartesian(ylim=c(0.0003, 1), expand = F) + #ylim=c(-10000,+10000)
   #scale_x_discrete(limits=c(0,2,4,6,8,10)) +
@@ -621,9 +704,9 @@ Fig2B <- ggplot(PIPT_EC50_mean, aes(Timepoint, Mean)) +
   geom_point(mapping = aes(color = interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 2, shape=16, stroke = 0.7) + #shape = Trea
   geom_errorbar(aes(ymin = Low, ymax = High, width=1, color = interaction(Treatment,Population,sep="-",lex.order=TRUE))) +
   geom_line(mapping = aes(colour = interaction(Treatment,Population,sep="-",lex.order=TRUE), linetype=interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 1) + #Fits polynomal function to data (can be changed to lm: https://plotly.com/ggplot2/stat_smooth/) and https://stackoverflow.com/questions/31829528/specify-regression-line-intercept-r-ggplot2
-  scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
+  scale_color_manual(values=c("gray14", "#008000", "#B85633", "azure4", "dodgerblue1", "darkgoldenrod2")) + #aesthetics = c("colour", "fill")) +scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
   scale_linetype_manual(values = c(1,2,1,1,2,1)) +
-  geom_vline(xintercept = 42.2, color="black", linetype = "dashed") +
+  geom_vline(xintercept = 42.2, color="green", linetype = "dashed") +
   coord_cartesian(xlim=c(-1, 46), ylim=c(6, 11), expand = F) + #ylim=c(-10000,+10000)
   #scale_x_discrete(limits=c(-0.5, 0 ,0.5, 1, 1.5, 2)) +
   scale_y_discrete(limits=c(6, 7, 8, 9, 10)) +
@@ -635,7 +718,7 @@ Fig2B <- ggplot(PIPT_EC50_mean, aes(Timepoint, Mean)) +
   labs (x="Time (days)", y=expression("EC50 (" *mu ~ "M Cu)"), title = "B") +
   theme(plot.title = element_text(vjust = - 35, hjust = 0.04)) +
   theme(panel.spacing = unit(0.2, "lines")) +
-  theme(legend.title=element_blank()) +
+  #theme(legend.title=element_blank()) +
   theme(legend.text=element_text(size=15)) +
   theme(text=(element_text(size=15))) +
   theme(axis.text=(element_text(size=15, colour = "Black"))) +
@@ -649,6 +732,154 @@ Fig2B <- ggplot(PIPT_EC50_mean, aes(Timepoint, Mean)) +
         legend.spacing.y=unit(0, "cm"),
         legend.key.width = unit(1.5,"cm"),
         legend.box.background = element_rect(fill='white'))
+
+print(Fig2B)
+#dev.copy(pdf, "Plots/Fig2B.pdf")
+#dev.off()
+
+#Lets try for 3 panels and a boxplots instead
+
+PIPT_EC50 <- read.table(file = "Input/PIPT_EC50.txt", sep = '\t', header = TRUE)
+sapply(PIPT_EC50, class)
+PIPT_EC50$Rep <- as.character(as.integer(PIPT_EC50$Rep))
+PIPT_EC50 <- PIPT_EC50[complete.cases(PIPT_EC50[,10]), ]
+PIPT_EC50_mean <- ddply(PIPT_EC50, c("Population", "Treatment", "Timepoint"), summarise,
+                        Mean = mean(EC50a), N = n(), 
+                        High = mean(EC50a)+2*sd(EC50a)/sqrt(n()), 
+                        Low = mean(EC50a)-2*sd(EC50a)/sqrt(n())) 
+
+#Showing individual reps as points
+Fig2A <- ggplot(PIPT_EC50, aes(x=Timepoint, y=EC50a, group=interaction(Treatment,Timepoint,sep="-",lex.order=TRUE), color = Treatment, shape=Rep)) + #shape=Rep
+  facet_grid(cols = vars(Population)) + # , rows = vars(Parameter),  +
+  geom_pointrange(aes(ymin = EC50a-2*EC50SEa, ymax = EC50a+2*EC50SEa), 
+                  position=position_jitter(width=0.5), size=0.5, stroke = 0.5) + #linetype='dotted'
+  scale_color_manual(values=c("black", "blue")) +
+  scale_shape_manual(values=c(0,1,2,4,5)) +
+  #scale_fill_manual(values=c("red", "red")) + #aesthetics = c("colour", "fill")) +scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
+  #scale_linetype_manual(values = c(1,2,1,1,2,1)) +
+  geom_vline(xintercept = 43, color="green", linetype = "dashed") +
+  #coord_cartesian(xlim=c(0.5, 4.5), ylim=c(7, 12), expand = F) + #ylim=c(-10000,+10000)
+  coord_cartesian(xlim=c(-1, 48), ylim=c(7, 12), expand = F) +
+  #scale_x_discrete(limits=c(-0.5, 0 ,0.5, 1, 1.5, 2)) +
+  scale_y_discrete(limits=c(7, 8, 9, 10, 11)) +
+  background_grid(major = "none", minor = "none") + # add thin horizontal lines
+  panel_border(colour = "black", size = 1) + # and a border around each panel
+  labs (x="Selection time (days)", y=expression("EC50 (" *mu ~ "M Cu)"), title = "") +
+  theme(plot.title = element_text(vjust = - 35, hjust = 0.04)) +
+  theme(panel.spacing = unit(0.2, "lines")) +
+  #theme(legend.title=element_blank()) +
+  theme(legend.text=element_text(size=10)) +
+  theme(text=(element_text(size=10))) +
+  theme(axis.text=(element_text(size=10, colour = "Black"))) +
+  theme(panel.background = element_blank()) +
+  theme(legend.key = element_blank()) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(aspect.ratio=1) +
+  theme(strip.background =element_rect(fill='white')) +
+  theme(legend.position = "right", 
+        legend.spacing.x=unit(0.1, "cm"),
+        legend.spacing.y=unit(0, "cm"),
+        legend.key.width = unit(1.5,"cm"),
+        legend.box.background = element_rect(fill='white'))
+
+print(Fig2A)
+dev.copy(pdf, "Plots/Fig2A.pdf")
+dev.off()
+
+#Or show it without scaling x-axis to time pased
+PIPT_EC50_2 <- PIPT_EC50
+PIPT_EC50_2$Timepoint <- as.character(as.integer(PIPT_EC50_2$Timepoint))
+PIPT_EC50_2$Timepoint <- recode_factor(PIPT_EC50_2$Timepoint, "45" = "3-days low Cu")
+#Change order of factors 
+PIPT_EC50_2$Timepoint <- factor(PIPT_EC50_2$Timepoint, levels = c("0","30", "42", "3-days low Cu"))
+
+Fig2Ab <- ggplot(PIPT_EC50_2, aes(x=Timepoint, y=EC50a, group=interaction(Treatment,Timepoint,sep="-",lex.order=TRUE), color = Treatment, shape=Rep)) + #shape=Rep
+  facet_grid(cols = vars(Population)) + # , rows = vars(Parameter),  +
+  geom_pointrange(aes(ymin = EC50a-2*EC50SEa, ymax = EC50a+2*EC50SEa), 
+                  position=position_jitter(width=0.2), size=0.6, stroke = 0.6) + #linetype='dotted'
+  scale_color_manual(values=c("black", "blue")) +
+  scale_shape_manual(values=c(0,1,2,4,5)) +
+  coord_cartesian(xlim=c(0.5, 4.5), ylim=c(7, 12), expand = F) +
+  #scale_x_discrete(limits=c(-0.5, 0 ,0.5, 1, 1.5, 2)) +
+  scale_y_discrete(limits=c(7, 8, 9, 10, 11)) +
+  background_grid(major = "none", minor = "none") + # add thin horizontal lines
+  panel_border(colour = "black", size = 1) + # and a border around each panel
+  labs (x="Assay day", y=expression("EC50 (" *mu ~ "M Cu)"), title = "") +
+  theme(plot.title = element_text(vjust = - 35, hjust = 0.04)) +
+  theme(panel.spacing = unit(0.2, "lines")) +
+  #theme(legend.title=element_blank()) +
+  theme(legend.text=element_text(size=12)) +
+  theme(text=(element_text(size=12))) +
+  #theme(axis.text=(element_text(size=10, colour = "Black"))) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, size=12, colour = "Black")) +
+  theme(panel.background = element_blank()) +
+  theme(legend.key = element_blank()) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(aspect.ratio=1) +
+  theme(strip.background =element_rect(fill='white')) +
+  theme(legend.position = "right", 
+        legend.spacing.x=unit(0.1, "cm"),
+        legend.spacing.y=unit(0, "cm"),
+        legend.key.width = unit(1.5,"cm"),
+        legend.box.background = element_rect(fill='white'))
+
+print(Fig2Ab)
+dev.copy(pdf, "Plots/Fig2Ab.pdf")
+dev.off()
+
+#Repeat for the PAM_short data
+PIPT_PAMshort <- read.table(file = "Input/PAM_short.txt", sep = '\t', header = TRUE)
+sapply(PIPT_PAMshort, class)
+PIPT_PAMshort$Rep <- as.character(as.integer(PIPT_PAMshort$Rep))
+PIPT_PAMshort$Timepoint <- as.character(as.integer(PIPT_PAMshort$Timepoint))
+PIPT_PAMshort <- PIPT_PAMshort[complete.cases(PIPT_PAMshort[,9]), ]
+PIPT_PAMshort_mean <- ddply(PIPT_PAMshort, c("Population", "Treatment", "Timepoint", "SamplePoint"), summarise,
+                        Mean = mean(YII), N = n(), 
+                        High = mean(YII)+2*sd(YII)/sqrt(n()), 
+                        Low = mean(YII)-2*sd(YII)/sqrt(n()),
+                        Exposure_h = mean(Exposure_h)) 
+#Change order of factors 
+PIPT_PAMshort_mean$Timepoint <- factor(PIPT_PAMshort_mean$Timepoint, levels = c("3","21", "39"))
+
+Fig2B<- ggplot(PIPT_PAMshort_mean, aes(x=Exposure_h, y=Mean, group=interaction(Treatment,Timepoint,sep="-",lex.order=TRUE), color = Treatment, shape=Timepoint)) +
+  facet_grid(cols = vars(Population)) + # , rows = vars(Parameter),  +
+  #geom_boxplot(position=position_dodge(0), color='#A4A4A4') +
+  #geom_dotplot(binaxis='y', stackdir='center', dotsize=0.1, shape=Rep) + #shape = Trea size = 2, shape=16, stroke = 0.7
+  #geom_jitter(position=position_jitter(1)) +
+  geom_point(aes()) + #linetype='dotted'
+  geom_line(mapping = aes(colour = Treatment, linetype=Timepoint)) +
+  geom_errorbar(aes(ymin = Low, ymax = High, width=0.1, color = Treatment)) +
+  #geom_point(mapping = aes(colour = interaction(Treatment,Population,sep="-",lex.order=TRUE), linetype=interaction(Treatment,Population,sep="-",lex.order=TRUE)), size = 1) + #Fits polynomal function to data (can be changed to lm: https://plotly.com/ggplot2/stat_smooth/) and https://stackoverflow.com/questions/31829528/specify-regression-line-intercept-r-ggplot2
+  scale_color_manual(values=c("black", "blue")) +
+  scale_shape_manual(values=c(0,1,2,4,5)) +
+  #scale_fill_manual(values=c("red", "red")) + #aesthetics = c("colour", "fill")) +scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +scale_color_manual(values=c("gray14", "#008000", "#B85633", "Blue", "dodgerblue1", "Blue")) + #aesthetics = c("colour", "fill")) +
+  scale_linetype_manual(values = c(3,2,1)) +
+  geom_vline(xintercept = 3.5, color="green", linetype = "dashed") +
+  coord_cartesian(xlim=c(-0.2, 3.5), ylim=c(0, 0.65), expand = F) + #ylim=c(-10000,+10000)
+  #scale_x_discrete(limits=c(-0.5, 0 ,0.5, 1, 1.5, 2)) +
+  scale_y_discrete(limits=c(0, 0.2, 0.4, 0.6)) +
+  #annotation_logticks(sides = "l") + # adds linier tickmarks
+  #coord_cartesian(ylim=c(-4,4), expand = F) + #changes the y axis
+  #theme(axis.text.x = element_text(angle = 45, hjust = 1)) + #adjust text tilt and possition
+  background_grid(major = "none", minor = "none") + # add thin horizontal lines
+  panel_border(colour = "black", size = 1) + # and a border around each panel
+  labs (x=expression("Exposure time to 15 " *mu ~ "M Cu (h)"), y=expression("Yield of PSII"), title = "") +
+  theme(plot.title = element_text(vjust = - 35, hjust = 0.04)) +
+  theme(panel.spacing = unit(0.2, "lines")) +
+  #theme(legend.title=element_blank()) +
+  theme(legend.text=element_text(size=12)) +
+  theme(text=(element_text(size=12))) +
+  theme(axis.text=(element_text(size=12, colour = "Black"))) +
+  theme(panel.background = element_blank()) +
+  theme(legend.key = element_blank()) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(aspect.ratio=1) +
+  theme(strip.background =element_rect(fill='white')) +
+  theme(legend.position = "right", 
+        legend.spacing.x=unit(0.1, "cm"),
+        legend.spacing.y=unit(0, "cm"),
+        legend.key.width = unit(1.5,"cm"),
+        legend.box.background = element_rect(fill='white'))
 #guides(fill=guide_legend(nrow = 3), color = guide_legend(override.aes = list(size = 1)))
 #guides(fill=guide_legend(ncol=2), color = guide_legend(override.aes = list(length=1))) #color = guide_legend(override.aes = list(length=1))
 
@@ -656,4 +887,145 @@ print(Fig2B)
 dev.copy(pdf, "Plots/Fig2B.pdf")
 dev.off()
 
+#Strain abundances incl. contaminated samples####
+Barcoding <- read.table(file = "Input/All_strains_allreps.txt", sep = '\t', header = TRUE)
+sapply(Barcoding, class)
+
+#Remove the strain samples
+unique(Barcoding$Strain)
+Barcoding2 <- subset.data.frame(Barcoding, grepl('VG|GP', Barcoding$Experiment))
+Barcoding_Avarages <- ddply(Barcoding2, c("Population", "Treatment", "Timepoint", "Strain"), summarise,
+                            mean = mean(Relative_abundance), sd = sd(Relative_abundance ))
+
+#Remove RO5 samples
+Barcoding_Avarages2 <- subset.data.frame(Barcoding_Avarages, grepl('VG|GP', Barcoding_Avarages$Population))
+
+#lets also Remove RO5AC from individual samples
+unique(Barcoding_Avarages2$Treatment)
+Barcoding_Avarages2 <- subset.data.frame(Barcoding_Avarages2, !grepl('RO5AC', Barcoding_Avarages2$Strain))
+
+#Need to clone start values to Cu
+Clone0 <- subset.data.frame(Barcoding_Avarages2, grepl('0', Barcoding_Avarages2$Timepoint))
+Clone0$Treatment <- recode_factor(Clone0$Treatment, "Control" = "Copper")
+Barcoding_Avarages2 <- rbind(Barcoding_Avarages2, Clone0)
+
 ##################
+#I will try to avoid using avarages in plot ans istead make a simplified version of the area plot as picharts for each replicate and timepoint
+
+#First i want to add up all strains that are irrelevant (i.e. low abundat in each population)
+#GP2-4_40, GP2-4_27, GP2-4_57, VG1-2_103, VG1-2_74, VG1-2_81
+Barcoding_abundant <- subset.data.frame(Barcoding, grepl('GP2-4_40|GP2-4_27|GP2-4_57|VG1-2_103|VG1-2_74|VG1-2_81', Barcoding$Strain))
+
+#I then need to add up GP and VG strains seperately
+Barcoding_othersGP <- subset.data.frame(Barcoding, !grepl('RO5AC|GP2-4_40|GP2-4_27|GP2-4_57|VG1-2_103|VG1-2_74|VG1-2_81', Barcoding$Strain))
+Barcoding_othersGP <- subset.data.frame(Barcoding_othersGP, grepl('^GP', Barcoding_othersGP$Strain))
+
+#Sum up the others by population
+Barcoding_othersGP <- ddply(Barcoding_othersGP, c("Experiment", "Treatment", "Population", "Timepoint", "Replicate"), summarise,
+                            Relative_abundance = sum(Relative_abundance))
+
+#Repeate for VG
+
+#I then need to add up GP and VG strains seperately
+Barcoding_othersVG <- subset.data.frame(Barcoding, !grepl('RO5AC|GP2-4_40|GP2-4_27|GP2-4_57|VG1-2_103|VG1-2_74|VG1-2_81', Barcoding$Strain))
+Barcoding_othersVG <- subset.data.frame(Barcoding_othersVG, grepl('^VG', Barcoding_othersVG$Strain))
+
+#Sum up the others by population
+Barcoding_othersVG <- ddply(Barcoding_othersVG, c("Experiment", "Treatment", "Population", "Timepoint", "Replicate"), summarise,
+                            Relative_abundance = sum(Relative_abundance))
+
+#Lets mock do the same for the abundant once to get the same format on the dataframes
+Barcoding_abundant <- ddply(Barcoding_abundant, c("Strain", "Experiment", "Population", "Treatment", "Timepoint", "Replicate"), summarise,
+                            Relative_abundance = sum(Relative_abundance))
+
+#
+#Lets join the three datasets back together
+Barcoding_othersGP$Population <- recode_factor(Barcoding_othersGP$Population, "VG" = "GP","GP" = "GP")
+Strain <- Barcoding_othersGP$Population
+Barcoding_othersGP <- cbind(Strain, Barcoding_othersGP)
+Barcoding_othersGP$Strain <- recode_factor(Barcoding_othersGP$Strain, "VG" = "Other_VG","GP" = "Other_GP")
+
+Barcoding_othersVG$Population <- recode_factor(Barcoding_othersVG$Population, "VG" = "VG","GP" = "VG")
+Strain <- Barcoding_othersVG$Population
+Barcoding_othersVG <- cbind(Strain, Barcoding_othersVG)
+Barcoding_othersVG$Strain <- recode_factor(Barcoding_othersVG$Strain, "VG" = "Other_VG","GP" = "Other_GP")
+
+#Merge all 3 df
+Barcoding_Simplified <- rbind(Barcoding_othersVG, Barcoding_othersGP, Barcoding_abundant)
+#Change order of strains factor
+Barcoding_Simplified$Strain <- factor(Barcoding_Simplified$Strain, levels = c("GP2-4_40", "GP2-4_27", "GP2-4_57", "Other_GP", "VG1-2_103", "VG1-2_74", "VG1-2_81", "Other_VG"))
+
+#Need to clone start values to Cu
+Clone1 <- subset.data.frame(Barcoding_Simplified, grepl('0', Barcoding_Simplified$Timepoint))
+Clone1$Treatment <- recode_factor(Clone1$Treatment, "Control" = "Copper")
+Barcoding_Simplified <- rbind(Barcoding_Simplified, Clone1)
+
+#colnames(Barcoding_others)[1]  <- ('Strain')
+#Barcoding_others$Strain <- recode_factor(Barcoding_others$Strain, "VG" = "Other_VG","GP" = "Other_GP")
+#Barcoding_Simplified <- rbind(Barcoding_abundant, Barcoding_others)
+#nrow(Barcoding_abundant)
+#nrow(Barcoding_others)
+#nrow(Barcoding_Simplified)
+#Subselect C samples for VG
+VG_C <- subset.data.frame(Barcoding_Simplified, grepl('Control', Barcoding_Simplified$Treatment))
+VG_C <- subset.data.frame(VG_C, grepl('VG', VG_C$Experiment))
+VG_C <- subset.data.frame(VG_C, !grepl('RO5AC', VG_C$Population))
+
+#Plot the data as bar or pie-charts (coord_polar)
+ggplot(VG_C, aes(x = "", y = Relative_abundance, fill = Strain)) +
+  geom_col() +
+  #coord_polar(theta = "y") +
+  scale_color_manual(values=c("#2166AC", "#4393C3", "#92C5DE", "gray14", "#B2182B", "#D6604D", "#F4A582", "#B85633"), aesthetics = c("colour", "fill")) +
+  facet_grid(rows = vars(Timepoint), cols = vars(Replicate)) +
+  theme_void() 
+
+dev.copy(pdf, "Plots/Fig_VG_C.pdf")
+dev.off()
+
+#Subselect C samples for VG
+VG_Cu <- subset.data.frame(Barcoding_Simplified, grepl('Copper', Barcoding_Simplified$Treatment))
+VG_Cu <- subset.data.frame(VG_Cu, grepl('VG', VG_Cu$Experiment))
+VG_Cu <- subset.data.frame(VG_Cu, !grepl('RO5AC', VG_Cu$Population))
+
+#Plot the data as bar or pie-charts (coord_polar)
+ggplot(VG_Cu, aes(x = "", y = Relative_abundance, fill = Strain)) +
+  geom_col() +
+  #coord_polar(theta = "y") +
+  scale_color_manual(values=c("#2166AC", "#4393C3", "#92C5DE", "gray14", "#B2182B", "#D6604D", "#F4A582", "#B85633"), aesthetics = c("colour", "fill")) +
+  facet_grid(rows = vars(Timepoint), cols = vars(Replicate)) +
+  theme_void() 
+
+dev.copy(pdf, "Plots/Fig_VG_Cu.pdf")
+dev.off()
+
+#Subselect C samples for GP
+GP_C <- subset.data.frame(Barcoding_Simplified, grepl('Control', Barcoding_Simplified$Treatment))
+GP_C <- subset.data.frame(GP_C, grepl('GP', GP_C$Experiment))
+GP_C <- subset.data.frame(GP_C, !grepl('RO5AC', GP_C$Population))
+
+#Plot the data as bar or pie-charts (coord_polar)
+ggplot(GP_C, aes(x = "", y = Relative_abundance, fill = Strain)) +
+  geom_col() +
+  #coord_polar(theta = "y") +
+  scale_color_manual(values=c("#2166AC", "#4393C3", "#92C5DE", "gray14", "#B2182B", "#D6604D", "#F4A582", "#B85633"), aesthetics = c("colour", "fill")) +
+  facet_grid(rows = vars(Timepoint), cols = vars(Replicate)) +
+  theme_void() 
+
+dev.copy(pdf, "Plots/Fig_GP_C.pdf")
+dev.off()
+
+#Subselect C samples for GP
+GP_Cu <- subset.data.frame(Barcoding_Simplified, grepl('Copper', Barcoding_Simplified$Treatment))
+GP_Cu <- subset.data.frame(GP_Cu, grepl('GP', GP_Cu$Experiment))
+GP_Cu <- subset.data.frame(GP_Cu, !grepl('RO5AC', GP_Cu$Population))
+
+#Plot the data as bar or pie-charts (coord_polar)
+ggplot(GP_Cu, aes(x = "", y = Relative_abundance, fill = Strain)) +
+  geom_col() +
+  #coord_polar(theta = "y") +
+  scale_color_manual(values=c("#2166AC", "#4393C3", "#92C5DE", "gray14", "#B2182B", "#D6604D", "#F4A582", "#B85633"), aesthetics = c("colour", "fill")) +
+  facet_grid(rows = vars(Timepoint), cols = vars(Replicate)) +
+  theme_void() 
+
+dev.copy(pdf, "Plots/Fig_GP_Cu.pdf")
+dev.off()

@@ -1,4 +1,4 @@
-Local;strain;Date;Wait time (h);Incubation Position;Light intensity;Control growth rate (day-1);S.D.;RO5 Spation control growth rate (day-1);Start Density (RFU);Concentration;Well position;Growth rate (day-1);Inhibition RAW;Inhibition;Replicate;Running ID
+Local;strain;Date;Wait time (h);Incubation Position;Light intensity;Control growth rate (day-1);S.D.;RO5 Spation control growth rate (day-1);Start Density (RFU);Concentration;Well position;Growth_rate;Inhibition RAW;Inhibition;Replicate;Running ID
 GP;GP2-4_26;43388;4.5;G6;168;1.360477626;0.205997207;1.332759775;0.003191346;17.5;A01;-0.465683077;1.342293815;1;1;GP_1
 GP;GP2-4_26;43388;4.5;G6;168;1.360477626;0.205997207;1.332759775;0.003191346;16.20266667;A02;-0.257113579;1.18898773;1;2;GP_1
 GP;GP2-4_26;43388;4.5;G6;168;1.360477626;0.205997207;1.332759775;0.003191346;15.00150898;A03;-0.715154355;1.525664179;1;3;GP_1

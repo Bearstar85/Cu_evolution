@@ -2,12 +2,11 @@
 #Lets clear old objects
 rm(list=ls())
 getwd()
-#and set the work directory in case we have moved around or opened another project
+#and set the work directory to the path where the script is
 setwd("~/Documents/R/Cu_evolution/Barcodes/Barcoding_C12W1/C12W1_abundances")
 dir()
 
-#Bash commands for formation input data#####
-
+#Bash commands for formation input data file names#####
 #cd /Users/xanbjg/Documents/R/Cu_evolution/Barcodes/Barcoding_C12W1/C12W1_abundances
 #rm *.Unknown_*
 #for i in *.Barcode_Quantities*; do mv "$i" "${i/.Barcode_Quantities/}"; done
@@ -28,7 +27,7 @@ library(grid)
 #library(gplots)
 library(tidyverse)
 #library(lubridate) # useful for working with dates
-#library(cowplot) # useul for combining multiple plots
+library(cowplot) # useul for combining multiple plots
 library(ggthemes)
 library(broom)
 library(ggpubr)
@@ -43,13 +42,12 @@ library(gplots)
 #Make a vector list of all input file names
 InputFiles <- list.files(path = "~/Documents/R/Cu_evolution/Barcodes/Barcoding_C12W1/C12W1_abundances/Input")
 InputFiles
+
 #And read in the get Indexing file
 #WARNING, certain Indexing names in Allels will not comply with differential equation function (notably x and df). 
 Allels <- read.delim("../Allele_indexing.txt", sep = '\t', header=TRUE)
 Indexing <- read.delim("../Indexing.txt", header=TRUE)
 sapply(Allels, class)
-#myData <- read.table(file = "Input/P21502_250.tsv", sep = '\t', header = TRUE)
-#myData <- join(myData, Allels, by = "Barcode")
 
 #First we setup the differential equation
 solve_allele_equation <- function(data, n_obs, allele_col, equation) {
@@ -57,7 +55,7 @@ solve_allele_equation <- function(data, n_obs, allele_col, equation) {
   # create a data.frame tol work on
   df <- data
   
-  # assign the number of obsrevations to the correct allele
+  # assign the number of observations to the correct allele
   for (j in 1:nrow(df)) {
     assign(x = df[[allele_col]][j], value = df[[n_obs]][j] )
   }
@@ -73,17 +71,12 @@ solve_allele_equation <- function(data, n_obs, allele_col, equation) {
   
 }
 
-# test the function on the test.data
-#solve_allele_equation(data = Allels, 
-                      #n_obs = "Total", 
-                      #allele_col = "Homologs", 
-                      #equation = "Differential_equation2")
-
-#Lets loop the analysis
-#First make a file to append to
+#Lets now loop the analysis
+#First make a file to append to (need the correct ncol matching the output file)
 rm(All_reads)
 All_reads <- data.frame(matrix(NA, ncol=26, nrow=0))[-1]
-header <- read.csv("Indexed/1_header.tmp", header = F)
+#The 1_header.tmp file is made in the loop below, and ncol should match its dimensions. 
+header <- read.csv("Indexed/1_header.csv", header = F)
 header <- t(header)
 colnames(All_reads) <- (header)
 
@@ -136,12 +129,12 @@ myData5$allel <- gsub('*', '', myData5$allel)
 #myData5 <- subset(myData5, select = -c(1))
 
 #Well save the header and export data
-output <- paste("Indexed/",ID,".csv", sep="")
-output2 <- paste("Read_counts/",ID,".csv", sep="")
+output <- paste("Indexed/",ID,".tmp", sep="")
+output2 <- paste("Read_counts/",ID,".tmp", sep="")
 output3 <- paste("Plots/",ID,".pdf", sep="")
 
 header <- colnames(myData5)
-write.table(header, "Indexed/1_header.tmp", sep=",",  col.names=FALSE, row.names =FALSE)
+write.table(header, "Indexed/1_header.csv", sep=",",  col.names=FALSE, row.names =FALSE)
 write.table(myData5, output, sep=",",  col.names=FALSE, row.names =FALSE)
 write.table(Read_counts, output2, sep=",",  col.names=FALSE, row.names =FALSE)
 
@@ -188,47 +181,37 @@ Fig1 <- ggplot(myData5, stats = "identity", aes(Strain, fill = allel)) +
         legend.spacing.x=unit(0, "cm"),
         legend.spacing.y=unit(0, "cm"))
 
+#Turn these lines on/off to output figures (slows the loop down alot)
 print(Fig1)
-
 dev.copy(pdf, output3)
 dev.off()
 
 }
 colnames(All_reads) <- (header)
 write.table(All_reads, "Indexed/All_reads.csv", sep=",",  col.names=TRUE, row.names =FALSE)
-#Summarize the results####
-
-#Run this in UNIX command in Results
-#cat *.csv > xxx.txt
-
-#Indexed/GP_adapted/GP_summary.txt
-#Indexed/VG_adapted/VG_summary.txt
-#Read_counts/GP_adapted/GP_summary.txt
-#Read_counts/VG_adapted/VG_summary.txt
-
-#Should do something like this here instead
-#temp = list.files(pattern="*.csv")
-#myfiles = lapply(temp, read.delim)
-
-#GP <- read.csv("Indexed/GP_adapted/GP_summary.txt", header=FALSE)
-#VG <- read.csv("Indexed/VG_adapted/VG_summary.txt", header=FALSE)
-#Strain <- read.csv("Indexed/Strains_oneAllele/Strain.txt", header=FALSE)
-
-#All_reads <- rbind(GP, VG, Strain)
-#All_reads2 <- read.csv("Indexed/All_reads.txt", header=TRUE)
-#header <- read.csv("Indexed/1_header.tmp", header = F)
-#header <- t(header)
-#colnames(All_reads) <- (header)
-unique(All_reads$Experiment)
-unique(All_reads$Treatment)
-head(All_reads)
-sapply(All_reads, class)
-All_reads$Replicate <- as.character(as.integer(All_reads$Replicate))
-unique(All_reads$Bottel)
-#change 0 to NA to fix plotting
-#All_reads$Relative_abundance[All_reads$Relative_abundance == 0] <- NA
+#Here you can skip loop above and just read in the file
+All_reads <- read.csv("Indexed/All_reads.csv", header=TRUE) #If run before, script can be started here
 
 #Graphical interpretation of data####
+
+#Count the occurrences of the wrong strain in the wrong population (False positives)
+VGs <- subset.data.frame(All_reads, grepl('VG', All_reads$Strain))
+VGs <- subset.data.frame(VGs, grepl('GP', VGs$Experiment))
+VG_FP<- length(VGs$Population[VGs$Total_C > 0])
+
+GPs <- subset.data.frame(All_reads, grepl('GP', All_reads$Strain))
+GPs <- subset.data.frame(GPs, grepl('VG', GPs$Experiment))
+GP_FP<- length(GPs$Population[GPs$Total_C > 0])
+
+#The number of indisputable false positives is
+VG_FP+GP_FP
+#Out of
+TO <- length(All_reads$Population[All_reads$Total_C > 0])
+#FDR is quite high comprising up to 23% of observations of strains alleles
+((VG_FP+GP_FP)*2)/TO
+
+#Lets see were FDRs are and how the data looks otherwise
+All_reads$Replicate <- as.character(as.integer(All_reads$Replicate))
 #Lets make a graph of only the MMs abundances.
 MMsamples <- subset.data.frame(All_reads, grepl("0", All_reads$Timepoint))
 MMsamples <- MMsamples[order(MMsamples$Strain),]
@@ -236,51 +219,6 @@ MMsamples$Relative_abundance[MMsamples$Relative_abundance == 0] <- NA
 sapply(MMsamples, class)
 AvaragesMM <- ddply(MMsamples, c("Experiment", "Strain", "allel"), summarise,
                      mean = mean(Relative_abundance), sd = sd(Relative_abundance))
-
-#This way hard to make errorbars right.
-Fig4 <- ggplot(AvaragesMM, stats = "identity", aes(Strain, fill = allel)) +
-#ggplot(AvaragesMM, x = "Strain", y = "mean", add = "mean_sd", fill = aes(Strain, allel)) + #, fstats = "identity", aes(Strain, 
-  geom_bar(data=AvaragesMM, aes(Strain, mean), position = "stack", stat = "identity") +
-  facet_grid(rows = vars(Experiment)) +
-  geom_hline(yintercept = 1/29) +
-  #geom_errorbar(aes(ymin = (mean-sd), ymax = (mean+sd), width=.4, color = Metal), position = position_dodge(0.1)) +
-  geom_errorbar(aes(ymin = (mean-sd), ymax = (mean+sd), width=0.2), stat = "identity") + #position = position_dodge(0.3
-  background_grid(major = "none", minor = "none") + # add thin horizontal lines
-  panel_border(colour = "black", size = 1) + # and a border around each panel
-  theme(plot.title = element_text(vjust = -5, hjust = 0.1)) +
-  scale_fill_manual(values = c("forestgreen", "darkolivegreen2", "chartreuse", "blue3", "dodgerblue2", "deepskyblue1", "darkorchid1", "grey")) +
-  labs (x="Strain", y="Fraction of amplicons") +
-  theme(panel.spacing = unit(0.1, "lines")) +
-  theme(legend.title=element_blank()) +
-  theme(legend.text=element_text(size=10)) +
-  theme(text=(element_text(size=10))) +
-  theme(axis.text=(element_text(size=6))) +
-  theme(axis.text.y = element_text(angle = 0, hjust = 1, size=10)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size=6)) +
-  theme(panel.background = element_blank()) +
-  theme(legend.key = element_blank()) +
-  theme(legend.text = element_text(face = "italic")) +
-  theme(aspect.ratio=0.25) +
-  theme(plot.margin=unit(c(0,1,0,0.2),"cm")) +
-  theme(strip.background = element_blank(),strip.text.x = element_blank()) +
-  theme(legend.position= c(0.83, 0.82),
-        #legend.box="horizontal",
-        #legend.justification = c("right", "top"),
-        #legend.box.just = "right",
-        #scale_fill_manual(breaks=c(3)),
-        legend.margin = margin(2, 2, 2, 2),
-        #guides(color = FALSE), #,color = FALSE, size = FALSE,
-        legend.box.background = element_rect(fill='white'),
-        legend.background = element_blank(),
-        legend.key = element_rect(fill = NA, color = NA),
-        legend.spacing.x=unit(0, "cm"),
-        legend.spacing.y=unit(0, "cm")) +
-  guides(fill=guide_legend(nrow=3,byrow=TRUE))
-
-print(Fig4)
-
-dev.copy(pdf, "Plots/Fig4.pdf")
-dev.off()
 
 #This way hard to remove boarders around bars, and keep errorbbars.
 Fig5 <- ggbarplot(MMsamples, x = "Strain", y = "Relative_abundance", add = "mean_sd", fill = "allel", size = 0,  facet.by = "Experiment") + #color=NA removes border but also error bars, ar
@@ -333,8 +271,6 @@ dev.off()
 #"GP2-4_26", "GP2-4_32", "GP2-4_39", "GP2-4_52", "GP2-4_54", "GP2-4_63"
 #"VG1-2_105", "VG1-2_61", "VG1-2_99or65"
 
-subset.data.frame(MMsamples, grepl("GP2-4_52", MMsamples$Strain))
-
 #Lets pick one strain at a time (Then Loop this)
 df_uniq <- unique(All_reads$Strain)
 colourCount = length(unique(mtcars$hp))
@@ -379,10 +315,10 @@ OneStrain3 <- join(Barcode1, Barcode2, by = "ID")
 colnames(OneStrain3) <- (c('ID', "Barcode1", "Barcode1_RA", "Total1", "Barcode2", "Barcode2_RA", "Total2"))
 OneStrain3$AllelRatio <- OneStrain3$Barcode1_RA/OneStrain3$Barcode2_RA
 OneStrain3$ReadSum <- OneStrain3$Total1+OneStrain3$Total2
-
+?select
 #append results here
 AlleleRatios <- rbind(AlleleRatios, OneStrain3)
-#End below here to avoid crash on figures
+#End below here to generate data but avoid crash on figures
 }
 
 quartz()
@@ -460,7 +396,6 @@ suppressWarnings(dev.off())
 
 #Allele ratios and correlations####
 
-#sapply(AlleleRatios2, class)
 #change 0 and inf to NA to fix plotting of ratios
 AlleleRatios2 <- join(AlleleRatios, Indexing, by = "ID")
 AlleleRatios2$Total1 <- as.numeric(as.integer(AlleleRatios2$Total1))
@@ -471,6 +406,11 @@ AlleleRatios2$AllelRatio[AlleleRatios2$AllelRatio == "inf"] <- NA
 AlleleRatios2$AllelRatio[sapply(AlleleRatios2$AllelRatio, is.infinite)] <- NA
 AlleleRatios2 <- na.omit(AlleleRatios2)
 
+#here we sum up RA and export the data (a bit messy)
+AlleleRatios2$Relative_abundances <- AlleleRatios2$Barcode1_RA+AlleleRatios2$Barcode2_RA
+AlleleRatios2$Barcode <- AlleleRatios2$Barcode1
+AlleleRatios2 <- join(AlleleRatios2, Allels, by = "Barcode")
+write.table(AlleleRatios2, "Indexed/All_strains_2xalleleFilt.txt", sep='\t',  col.names=TRUE, row.names =FALSE)
 
 #Lets look at the distribution of values
 min(AlleleRatios2$AllelRatio)
@@ -882,6 +822,7 @@ ggbiplot(PCA2, ellipse=TRUE)
 #Now I will modify the analysis to make quantitative predictions about strain density using barcodes
 
 #Lets loop the analysis
+Allels <- read.delim("../Allele_indexing.txt", sep = '\t', header=TRUE)
 #First make a file to append to
 rm(All_Strains)
 All_Strains <- data.frame(matrix(NA, ncol=26, nrow=0))[-1]
@@ -889,7 +830,7 @@ header <- read.csv("Indexed/1_header.tmp", header = F)
 header <- t(header)
 colnames(All_reads) <- (header)
 
-#i <-"P21502_146.tsv"
+#i <-"P21502_250.tsv"
 for (i in InputFiles) {
   #Import data (too be looped)
   input=paste("Input/",i,"", sep="")
@@ -903,7 +844,6 @@ for (i in InputFiles) {
   sapply(myData3, class)
   #length(unique(myData3$Diffrential_ID))
   #sort(unique(myData3$Diffrential_ID))
-  
   #Solve differential equation
   myData4 <- solve_allele_equation(data = myData3, 
                                    n_obs = "Total", 
@@ -951,4 +891,20 @@ for (i in InputFiles) {
 #colnames(All_Strains) <- (header)
 write.table(All_Strains, "Indexed/All_strains.txt", sep='\t',  col.names=TRUE, row.names =FALSE)
 
-#Summarize the results####
+#Count the occurrences of the wrong strain in the wrong population (False positives)
+VGs <- subset.data.frame(All_Strains, grepl('VG', All_Strains$Strain))
+VGs <- subset.data.frame(VGs, grepl('GP', VGs$Experiment))
+VG_FP<- length(VGs$Population[VGs$Total_C > 0])
+
+GPs <- subset.data.frame(All_Strains, grepl('GP', All_Strains$Strain))
+GPs <- subset.data.frame(GPs, grepl('VG', GPs$Experiment))
+GP_FP<- length(GPs$Population[GPs$Total_C > 0])
+
+#The number of indisputable false positives is
+VG_FP+GP_FP
+#Out of
+TO <- length(All_Strains$Population[All_Strains$Total_C > 0])
+TO
+#FDR is reduced four fold and now at 5.9% of strains observations
+#and as seen above it is mainly very low abundance observations that are affected by FP
+((VG_FP+GP_FP)*2)/TO

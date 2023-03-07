@@ -1,0 +1,37 @@
+"Variable.pair.i."	"p.value"
+"NADH dehydrogenase_C2_vs_Cu-transporting P1B-type ATPases_C15"	0.0458563575864659
+"Metal cheleator_Cue6-7_C14_vs_Cytochrome c oxidase subunit I_mito"	0.0366660853168068
+"Barcode_C_vs_Cytochrome c oxidase subunit I_mito"	0.040552869310766
+"Growth_Rate_vs_Cytochrome c oxidase subunit I_mito"	0.0176524238840516
+"Surface_Vol_ratio_vs_Cytochrome c oxidase subunit I_mito"	0.0213027313089995
+"ferric reductases_C63_vs_Cytochrome c6 isoform B_C18"	0.0400901034775085
+"L-ascorbate oxidase_C32_vs_Cytochrome c6 isoform B_C18"	0.00676887846927254
+"Multimetal transporter (ZIP)_C41_vs_Cytochrome c6 isoform B_C18"	0.00124142170164632
+"Surface_Vol_ratio_vs_Cytochrome c6 isoform B_C18"	0.00775691223308561
+"Multicopper oxidase-like (SufI)_C37_vs_L-ascorbate oxidase_C32"	0.0383933397890877
+"Multimetal transporter (ZIP)_C41_vs_L-ascorbate oxidase_C32"	0.00429447327940569
+"Barcode_C_vs_Metal cheleator_Cue6-7_C14"	0.0082475281299117
+"Multicopper oxidase-like (SufI)_C7_vs_Multicopper oxidase-like (SufI)_C37"	4.29647810662459e-08
+"Barcode_C_vs_Multicopper oxidase-like (SufI)_C7"	0.00717393894509222
+"Barcode_C_vs_Multimetal transporter (ZIP)_C111"	0.0436127671737356
+"EC50_vs_Multimetal transporter (ZIP)_C111"	0.0467182008960159
+"EC95_vs_Multimetal transporter (ZIP)_C111"	0.0370737389971167
+"Growth_Rate_vs_Barcode_C"	0.00213311587658338
+"FvFm_vs_Barcode_C"	0.000679328547370961
+"Barcoded_CuInhibition_vs_Barcode_Cu"	0
+"EC95_vs_Barcode_Cu"	0.00808143591620469
+"CuGrowth_vs_Barcode_Cu"	0.0208371104246423
+"EC95_vs_Barcoded_CuInhibition"	0.0190096246323641
+"CuGrowth_vs_Barcoded_CuInhibition"	0.0423556646962919
+"EC50_vs_EC05"	1.80453429976524e-11
+"ResponseRange_Cu_vs_EC05"	8.88178419700125e-16
+"Growth_Rate_vs_EC05"	0.0243753569946437
+"CuGrowth_vs_EC05"	0.000512230119204204
+"EC95_vs_EC50"	4.24407176069508e-11
+"ResponseRange_Cu_vs_EC50"	0.00841615398926976
+"CuGrowth_vs_EC50"	0
+"ResponseRange_Cu_vs_EC95"	0.0167613267319777
+"CuGrowth_vs_EC95"	0
+"Growth_Rate_vs_ResponseRange_Cu"	0.00536790971010359
+"FvFm_vs_Growth_Rate"	0.0288710504788616
+"CuGrowth_vs_Growth_Rate"	0.0497189653076111

@@ -1,119 +1,119 @@
-Barcode	Uniqe_all	Uniqe_pop	Homologs	Diffrential_ID	Strain	Index	Differential_equation	Differential_equation_strains	Modified_allelcounts
-P21502_101_C12W1_1*	No	No	aa	aa1	GP2-4_26	1	aa1 * (an / (an + bt))	aa1 * (an / (an + bt)) * 2	YES
-P21502_101_C12W1_2	Yes	Yes	an	an	GP2-4_26	2	an	0	NA
-P21502_102_C12W1_1	Yes	Yes	ao	ao	GP2-4_27	3	ao	ao + ap	NO
-P21502_102_C12W1_2	Yes	Yes	ap	ap	GP2-4_27	4	ap	0	NA
-P21502_103_C12W1_1	Yes	Yes	aq	aq	GP2-4_28	5	aq	aq + af1 * (aq / (aq + cj + 0.15 * eh))	NO
-P21502_103_C12W1_2**	No	No	af	af1	GP2-4_28	6	af1 * (aq / (aq + cj + 0.15 * eh))	0	NA
-P21502_104_C12W1_1	Yes	Yes	ac	ac	GP2-4_29	7	ac	ac + eg	NO
-P21502_104_C12W1_2	Yes	Yes	eg	eg	GP2-4_29	8	eg	0	NA
-P21502_105_C12W1_1	Yes	Yes	ar	ar	GP2-4_31	9	ar	ar + as	NO
-P21502_105_C12W1_2	Yes	Yes	as	as	GP2-4_31	10	as	0	NA
-P21502_108_C12W1_1*	No	Yes	am	am1	GP2-4_39	11	am1 * (at / (at + de))	am1 * (at / (at + de)) + at	NO
-P21502_108_C12W1_2	Yes	Yes	at	at	GP2-4_39	12	at	0	NA
-P21502_109_C12W1_1	Yes	Yes	au	au	GP2-4_40	13	au	au + av	NO
-P21502_109_C12W1_2	Yes	Yes	av	av	GP2-4_40	14	av	0	NA
-P21502_111_C12W1_1	Yes	Yes	aw	aw	GP2-4_42	15	aw	ax * 2	YES
-P21502_111_C12W1_2	Yes	Yes	ax	ax	GP2-4_42	16	ax	0	NA
-P21502_112_C12W1_2**	No	No	af	af2	GP2-4_43	17	af2 * (0.15 * eh / (aq + cj + 0.15 * eh))	0	NA
-P21502_112_C12W1_1	Yes	Yes	eh	eh	GP2-4_43	18	eh	eh + af2 * (0.15 * eh / (aq + cj + 0.15 * eh))	NO
-P21502_113_C12W1_1	Yes	Yes	ai	ai	GP2-4_44	19	ai	al * 2	YES
-P21502_113_C12W1_2	Yes	Yes	al	al	GP2-4_44	20	al	0	NA
-P21502_114_C12W1_1	No	No	ae	ae	GP2-4_45and46	21	ae	ae + ad	NO
-P21502_114_C12W1_2	No	No	ad	ad	GP2-4_45and46	22	ad	0	NA
-P21502_116_C12W1_1*	No	Yes	ak	ak1	GP2-4_47	23	ak1 * (ay / (ay + da))	ai + al	NO
-P21502_116_C12W1_2	Yes	Yes	ay	ay	GP2-4_47	24	ay	0	NA
-P21502_117_C12W1_1	Yes	Yes	ah	ah	GP2-4_51	25	ah	ah + ag	NO
-P21502_117_C12W1_2	Yes	Yes	ag	ag	GP2-4_51	26	ag	0	NA
-P21502_118_C12W1_1	Yes	Yes	az	az	GP2-4_52	27	az	az + ba	NO
-P21502_118_C12W1_2	Yes	Yes	ba	ba	GP2-4_52	28	ba	0	NA
-P21502_119_C12W1_1	Yes	Yes	bb	bb	GP2-4_54	29	bb	bb + bc	NO
-P21502_119_C12W1_2	Yes	Yes	bc	bc	GP2-4_54	30	bc	0	NA
-P21502_120_C12W1_1	Yes	Yes	bd	bd	GP2-4_55	31	bd	bd + be	NO
-P21502_120_C12W1_2	Yes	Yes	be	be	GP2-4_55	32	be	0	NA
-P21502_121_C12W1_1	Yes	Yes	bf	bf	GP2-4_56	33	bf	bf + ab2 * (bf / (bu + bf + dn))	NO
-P21502_121_C12W1_2**	No	No	ab	ab2	GP2-4_56	34	ab2 * (bf / (bu + bf + dn))	0	NA
-P21502_122_C12W1_1	Yes	Yes	bg	bg	GP2-4_57	35	bg	bg + bh	NO
-P21502_122_C12W1_2	Yes	Yes	bh	bh	GP2-4_57	36	bh	0	NA
-P21502_123_C12W1_1	Yes	Yes	bi	bi	GP2-4_61	37	bi	bi * 2	YES
-P21502_123_C12W1_2	Yes	Yes	bj	bj	GP2-4_61	38	bj	0	NA
-P21502_124_C12W1_1	Yes	Yes	bk	bk	GP2-4_63	39	bk	bk * 2	YES
-P21502_124_C12W1_2	Yes	Yes	bl	bl	GP2-4_63	40	bl	0	NA
-P21502_125_C12W1_1	Yes	Yes	bm	bm	GP2-4_67	41	bm	bm + bn	NO
-P21502_125_C12W1_2	Yes	Yes	bn	bn	GP2-4_67	42	bn	0	NA
-P21502_126_C12W1_1	Yes	Yes	bo	bo	GP2-4_68	43	bo	bo + bp	NO
-P21502_126_C12W1_2	Yes	Yes	bp	bp	GP2-4_68	44	bp	0	NA
-P21502_127_C12W1_1*	No	Yes	aj	aj1	GP2-4_69	45	aj1 * (bq / (bq + cv))	aj1 * (bq / (bq + cv)) + bq	NO
-P21502_127_C12W1_2	Yes	Yes	bq	bq	GP2-4_69	46	bq	0	NA
-P21502_128_C12W1_1	Yes	Yes	br	br	GP2-4_70	47	br	br + bs	NO
-P21502_128_C12W1_2	Yes	Yes	bs	bs	GP2-4_70	48	bs	0	NA
-P21502_107_C12W1_1*	No	No	aa	aa2	GP2-4_71	49	aa2 * (bt / (an + bt))	aa2 * (bt / (an + bt)) + bt	NO
-P21502_107_C12W1_2	Yes	Yes	bt	bt	GP2-4_71	50	bt	0	NA
-P21502_110_C12W1_1	Yes	Yes	bu	bu	GP2-4_72	51	bu	bu + ab1 * (bu / (bu + bf + dn))	NO
-P21502_110_C12W1_2**	No	No	ab	ab1	GP2-4_72	52	ab1 * (bu / (bu + bf + dn))	0	NA
-P21502_129_C12W1_1	Yes	Yes	bv	bv	VG1-2_44	53	bv	bv + bw	NO
-P21502_129_C12W1_2	Yes	Yes	bw	bw	VG1-2_44	54	bw	0	NA
-P21502_130_C12W1_1	Yes	Yes	bx	bx	VG1-2_45	55	bx	bx + by	NO
-P21502_130_C12W1_2	Yes	Yes	by	by	VG1-2_45	56	by	0	NA
-P21502_131_C12W1_1	Yes	Yes	bz	bz	VG1-2_49	57	bz	bz + ca	NO
-P21502_131_C12W1_2	Yes	Yes	ca	ca	VG1-2_49	58	ca	0	NA
-P21502_132_C12W1_1	Yes	Yes	cb	cb	VG1-2_56	59	cb	cb + cc	NO
-P21502_132_C12W1_2	Yes	Yes	cc	cc	VG1-2_56	60	cc	0	NA
-P21502_133_C12W1_1	Yes	Yes	cd	cd	VG1-2_58	61	cd	cd + ce	NO
-P21502_133_C12W1_2	Yes	Yes	ce	ce	VG1-2_58	62	ce	0	NA
-P21502_134_C12W1_1	Yes	Yes	cf	cf	VG1-2_61	63	cf	cf * 2	YES
-P21502_134_C12W1_2	Yes	Yes	cg	cg	VG1-2_61	64	cg	0	NA
-P21502_135_C12W1_1	Yes	Yes	ch	ch	VG1-2_63	65	ch	ch + ci	NO
-P21502_135_C12W1_2	Yes	Yes	ci	ci	VG1-2_63	66	ci	0	NA
-P21502_136_C12W1_1	Yes	Yes	cj	cj	VG1-2_64	67	cj	cj + af3 * (cj / (aq + cj + 0.15 * eh))	NO
-P21502_136_C12W1_2**	No	Yes	af	af3	VG1-2_64	68	af3 * (cj / (aq + cj + 0.15 * eh))	0	NA
-P21502_137_C12W1_1	Yes	Yes	ck	ck	VG1-2_66	69	ck	ck * 2	YES
-P21502_137_C12W1_2	Yes	Yes	cl	cl	VG1-2_66	70	cl	0	NA
-P21502_138_C12W1_1	Yes	Yes	cm	cm	VG1-2_67	71	cm	cm + cn	NO
-P21502_138_C12W1_2	Yes	Yes	cn	cn	VG1-2_67	72	cn	0	NA
-P21502_139_C12W1_1	Yes	Yes	co	co	VG1-2_72	73	co	co + cp	NO
-P21502_139_C12W1_2	Yes	Yes	cp	cp	VG1-2_72	74	cp	0	NA
-P21502_140_C12W1_1	Yes	Yes	cq	cq	VG1-2_74	75	cq	cq + cr	NO
-P21502_140_C12W1_2	Yes	Yes	cr	cr	VG1-2_74	76	cr	0	NA
-P21502_141_C12W1_1	Yes	Yes	cs	cs	VG1-2_78	77	cs	ct + cu	NO
-P21502_141_C12W1_2	Yes	Yes	ct	ct	VG1-2_78	78	ct	0	NA
-P21502_141_C12W1_3	Yes	Yes	cu	cu	VG1-2_78	79	cu	0	NA
-P21502_142_C12W1_1	Yes	Yes	cv	cv	VG1-2_81	80	cv	cv + aj2 * (cv / (bq + cv))	NO
-P21502_142_C12W1_2*	No	Yes	aj	aj2	VG1-2_81	81	aj2 * (cv / (bq + cv))	0	NA
-P21502_143_C12W1_1	Yes	Yes	cw	cw	VG1-2_83	82	cw	cx * 2	YES
-P21502_143_C12W1_2	Yes	Yes	cx	cx	VG1-2_83	83	cx	0	NA
-P21502_144_C12W1_1	Yes	Yes	cy	cy	VG1-2_85	84	cy	cy + cz	NO
-P21502_144_C12W1_2	Yes	Yes	cz	cz	VG1-2_85	85	cz	0	NA
-P21502_145_C12W1_1	Yes	Yes	da	da	VG1-2_86	86	da	da + ak2 * (da / (ay + da))	NO
-P21502_145_C12W1_2*	No	Yes	ak	ak2	VG1-2_86	87	ak2 * (da / (ay + da))	0	NA
-P21502_146_C12W1_1	Yes	Yes	db	db	VG1-2_88	88	db	db * 2	YES
-P21502_146_C12W1_2	Yes	Yes	dc	dc	VG1-2_88	89	dc	0	NA
-P21502_147_C12W1_1*	No	Yes	am	am2	VG1-2_89	90	am2 * (de / (at + de))	am2 * (de / (at + de)) + de	NO
-P21502_147_C12W1_2	Yes	Yes	de	de	VG1-2_89	91	de	0	NA
-P21502_148_C12W1_1	Yes	Yes	dg	dg	VG1-2_90	92	dg	dg + dd	NO
-P21502_148_C12W1_2	Yes	Yes	dd	dd	VG1-2_90	93	dd	0	NA
-P21502_149_C12W1_1	Yes	Yes	dh	dh	VG1-2_93	94	dh	dh + di	NO
-P21502_149_C12W1_2	Yes	Yes	di	di	VG1-2_93	95	di	0	NA
-P21502_150_C12W1_1	Yes	Yes	dj	dj	VG1-2_94	96	dj	dk * 2	YES
-P21502_150_C12W1_2	Yes	Yes	dk	dk	VG1-2_94	97	dk	0	NA
-P21502_151_C12W1_1	Yes	Yes	dl	dl	VG1-2_95	98	dl	dl + dm	NO
-P21502_151_C12W1_2	Yes	Yes	dm	dm	VG1-2_95	99	dm	0	NA
-P21502_152_C12W1_1**	No	Yes	ab	ab3	VG1-2_103	100	ab3 * (dn / (bu + bf + dn))	ab3 * (dn / (bu + bf + dn)) + dn	NO
-P21502_152_C12W1_2	Yes	Yes	dn	dn	VG1-2_103	101	dn	0	NA
-P21502_153_C12W1_1	Yes	Yes	do	do	VG1-2_104	102	do	do + dp	NO
-P21502_153_C12W1_2	Yes	Yes	dp	dp	VG1-2_104	103	dp	0	NA
-P21502_154_C12W1_1	Yes	Yes	dq	dq	VG1-2_105	104	dq	dq * 2	YES
-P21502_154_C12W1_2	Yes	Yes	dr	dr	VG1-2_105	105	dr	0	NA
-P21502_155_C12W1_1	Yes	Yes	ds	ds	VG1-2_106	106	ds	dt * 2	YES
-P21502_155_C12W1_2	Yes	Yes	dt	dt	VG1-2_106	107	dt	0	NA
-P21502_156_C12W1_1	Yes	Yes	du	du	VG1-2_107	108	du	du + dv	NO
-P21502_156_C12W1_2	Yes	Yes	dv	dv	VG1-2_107	109	dv	0	NA
-R05_C12W1_1	Yes	Yes	dx	dx	RO5AC	110	dx	dx + dy	NO
-R05_C12W1_2	Yes	Yes	dy	dy	RO5AC	111	dy	0	NA
-Unknown1_VGx_C12W1_1	Yes	Yes	dz	dz	VG1-2_99or65	112	dz	dz * 2	YES
-Unknown1_VGx_C12W1_2	Yes	Yes	ea	ea	VG1-2_99or65	113	ea	0	NA
-Unknown1_VGy_C12W1_1	Yes	Yes	eb	eb	VG1-2_65or99	114	eb	eb + ec	NO
-Unknown1_VGy_C12W1_2	Yes	Yes	ec	ec	VG1-2_65or99	115	ec	0	NA
-P21502_106_C12W1_1	Yes	Yes	ed	ed	GP2-4_32	116	ed	ed * 2	YES
-P21502_106_C12W1_2	Yes	Yes	ee	ee	GP2-4_32	117	ee	0	NA
-P21502_119_C12W1_3	Yes	Yes	ef	ef	GP2-4_54	118	ef	0	NA
+Barcode	Uniqe_all	Uniqe_pop	Homologs	Diffrential_ID	Strain	Index	Differential_equation	Modified_allelcounts	Differential_equation_strains
+P21502_101_C12W1_1*	No	No	aa	aa1	GP2-4_26	1	aa1 * (an / (an + bt))	YES	(aa1 * (an / (an + bt)) + an) * ((aa1 * (an / (an + bt)) * an) / (aa1 * (an / (an + bt)) * an))
+P21502_101_C12W1_2	Yes	Yes	an	an	GP2-4_26	2	an	NA	0
+P21502_102_C12W1_1	Yes	Yes	ao	ao	GP2-4_27	3	ao	NO	(ao + ap) * ((ao * ap ) / (ao * ap))
+P21502_102_C12W1_2	Yes	Yes	ap	ap	GP2-4_27	4	ap	NA	0
+P21502_103_C12W1_1	Yes	Yes	aq	aq	GP2-4_28	5	aq	NO	(aq + af1 * (aq / (aq + cj + 0.15 * eh))) * ((aq * af1 * (aq / (aq + cj + 0.15 * eh))) / (aq * af1 * (aq / (aq + cj + 0.15 * eh))))
+P21502_103_C12W1_2**	No	No	af	af1	GP2-4_28	6	af1 * (aq / (aq + cj + 0.15 * eh))	NA	0
+P21502_104_C12W1_1	Yes	Yes	ac	ac	GP2-4_29	7	ac	NO	(ac + eg) * ((ac * eg) / (ac * eg))
+P21502_104_C12W1_2	Yes	Yes	eg	eg	GP2-4_29	8	eg	NA	0
+P21502_105_C12W1_1	Yes	Yes	ar	ar	GP2-4_31	9	ar	NO	(ar + as ) * ((ar * as ) / (ar * as))
+P21502_105_C12W1_2	Yes	Yes	as	as	GP2-4_31	10	as	NA	0
+P21502_108_C12W1_1*	No	Yes	am	am1	GP2-4_39	11	am1 * (at / (at + de))	NO	(am1 * (at / (at + de)) + at) * ((am1 * (at / (at + de)) * at) / (am1 * (at / (at + de)) * at))
+P21502_108_C12W1_2	Yes	Yes	at	at	GP2-4_39	12	at	NA	0
+P21502_109_C12W1_1	Yes	Yes	au	au	GP2-4_40	13	au	NO	(au + av) * ((au * av) / (au * av))
+P21502_109_C12W1_2	Yes	Yes	av	av	GP2-4_40	14	av	NA	0
+P21502_111_C12W1_1	Yes	Yes	aw	aw	GP2-4_42	15	aw	YES	(ax + aw) * ((ax * aw) / (ax * aw))
+P21502_111_C12W1_2	Yes	Yes	ax	ax	GP2-4_42	16	ax	NA	0
+P21502_112_C12W1_2**	No	No	af	af2	GP2-4_43	17	af2 * (0.15 * eh / (aq + cj + 0.15 * eh))	NA	0
+P21502_112_C12W1_1	Yes	Yes	eh	eh	GP2-4_43	18	eh	NO	(eh + af2 * (0.15 * eh / (aq + cj + 0.15 * eh))) * ((eh * af2 * (0.15 * eh / (aq + cj + 0.15 * eh))) / (eh * af2 * (0.15 * eh / (aq + cj + 0.15 * eh))))
+P21502_113_C12W1_1	Yes	Yes	ai	ai	GP2-4_44	19	ai	YES	(al + ai) * ((al * ai) / (al * ai))
+P21502_113_C12W1_2	Yes	Yes	al	al	GP2-4_44	20	al	NA	0
+P21502_114_C12W1_1	No	No	ae	ae	GP2-4_45and46	21	ae	NO	(ae + ad) * ((ae * ad) / (ae * ad))
+P21502_114_C12W1_2	No	No	ad	ad	GP2-4_45and46	22	ad	NA	0
+P21502_116_C12W1_1*	No	Yes	ak	ak1	GP2-4_47	23	ak1 * (ay / (ay + da))	NO	(ak1 * (ay / (ay + da)) + ay) * ((ak1 * (ay / (ay + da)) * ay) / (ak1 * (ay / (ay + da)) * ay))
+P21502_116_C12W1_2	Yes	Yes	ay	ay	GP2-4_47	24	ay	NA	0
+P21502_117_C12W1_1	Yes	Yes	ah	ah	GP2-4_51	25	ah	NO	(ah + ag) * ((ah * ag) / (ah * ag))
+P21502_117_C12W1_2	Yes	Yes	ag	ag	GP2-4_51	26	ag	NA	0
+P21502_118_C12W1_1	Yes	Yes	az	az	GP2-4_52	27	az	NO	(az + ba) * ((az * ba) / (az * ba))
+P21502_118_C12W1_2	Yes	Yes	ba	ba	GP2-4_52	28	ba	NA	0
+P21502_119_C12W1_1	Yes	Yes	bb	bb	GP2-4_54	29	bb	NO	(bb + bc) * ((bb * bc) / (bb * bc))
+P21502_119_C12W1_2	Yes	Yes	bc	bc	GP2-4_54	30	bc	NA	0
+P21502_120_C12W1_1	Yes	Yes	bd	bd	GP2-4_55	31	bd	NO	(bd + be) * ((bd * be) / (bd * be))
+P21502_120_C12W1_2	Yes	Yes	be	be	GP2-4_55	32	be	NA	0
+P21502_121_C12W1_1	Yes	Yes	bf	bf	GP2-4_56	33	bf	NO	(bf + ab2 * (bf / (bu + bf + dn))) * ((bf * ab2 * (bf / (bu + bf + dn))) / (bf * ab2 * (bf / (bu + bf + dn))))
+P21502_121_C12W1_2**	No	No	ab	ab2	GP2-4_56	34	ab2 * (bf / (bu + bf + dn))	NA	0
+P21502_122_C12W1_1	Yes	Yes	bg	bg	GP2-4_57	35	bg	NO	(bg + bh) * ((bg * bh) / (bg * bh))
+P21502_122_C12W1_2	Yes	Yes	bh	bh	GP2-4_57	36	bh	NA	0
+P21502_123_C12W1_1	Yes	Yes	bi	bi	GP2-4_61	37	bi	YES	(bi + bj) * ((bi * bj) / (bi * bj))
+P21502_123_C12W1_2	Yes	Yes	bj	bj	GP2-4_61	38	bj	NA	0
+P21502_124_C12W1_1	Yes	Yes	bk	bk	GP2-4_63	39	bk	YES	(bk + bl) * ((bk * bl) / (bk * bl))
+P21502_124_C12W1_2	Yes	Yes	bl	bl	GP2-4_63	40	bl	NA	0
+P21502_125_C12W1_1	Yes	Yes	bm	bm	GP2-4_67	41	bm	NO	(bm + bn) * ((bm * bn) / (bm * bn))
+P21502_125_C12W1_2	Yes	Yes	bn	bn	GP2-4_67	42	bn	NA	0
+P21502_126_C12W1_1	Yes	Yes	bo	bo	GP2-4_68	43	bo	NO	(bo + bp) * ((bo * bp) / (bo * bp))
+P21502_126_C12W1_2	Yes	Yes	bp	bp	GP2-4_68	44	bp	NA	0
+P21502_127_C12W1_1*	No	Yes	aj	aj1	GP2-4_69	45	aj1 * (bq / (bq + cv))	NO	(aj1 * (bq / (bq + cv)) + bq) * ((aj1 * (bq / (bq + cv)) * bq) / (aj1 * (bq / (bq + cv)) * bq))
+P21502_127_C12W1_2	Yes	Yes	bq	bq	GP2-4_69	46	bq	NA	0
+P21502_128_C12W1_1	Yes	Yes	br	br	GP2-4_70	47	br	NO	(br + bs) * ((br * bs) / (br * bs))
+P21502_128_C12W1_2	Yes	Yes	bs	bs	GP2-4_70	48	bs	NA	0
+P21502_107_C12W1_1*	No	No	aa	aa2	GP2-4_71	49	aa2 * (bt / (an + bt))	NO	(aa2 * (bt / (an + bt)) + bt) * ((aa2 * (bt / (an + bt)) * bt) / (aa2 * (bt / (an + bt)) * bt))
+P21502_107_C12W1_2	Yes	Yes	bt	bt	GP2-4_71	50	bt	NA	0
+P21502_110_C12W1_1	Yes	Yes	bu	bu	GP2-4_72	51	bu	NO	(bu + ab1 * (bu / (bu + bf + dn))) * ((bu * ab1 * (bu / (bu + bf + dn))) / (bu * ab1 * (bu / (bu + bf + dn))))
+P21502_110_C12W1_2**	No	No	ab	ab1	GP2-4_72	52	ab1 * (bu / (bu + bf + dn))	NA	0
+P21502_129_C12W1_1	Yes	Yes	bv	bv	VG1-2_44	53	bv	NO	(bv + bw) * ((bv * bw) / (bv * bw))
+P21502_129_C12W1_2	Yes	Yes	bw	bw	VG1-2_44	54	bw	NA	0
+P21502_130_C12W1_1	Yes	Yes	bx	bx	VG1-2_45	55	bx	NO	(bx + by) * ((bx * by) / (bx * by))
+P21502_130_C12W1_2	Yes	Yes	by	by	VG1-2_45	56	by	NA	0
+P21502_131_C12W1_1	Yes	Yes	bz	bz	VG1-2_49	57	bz	NO	(bz + ca) * ((bz * ca) / (bz * ca))
+P21502_131_C12W1_2	Yes	Yes	ca	ca	VG1-2_49	58	ca	NA	0
+P21502_132_C12W1_1	Yes	Yes	cb	cb	VG1-2_56	59	cb	NO	(cb + cc) * ((cb * cc) / (cb * cc))
+P21502_132_C12W1_2	Yes	Yes	cc	cc	VG1-2_56	60	cc	NA	0
+P21502_133_C12W1_1	Yes	Yes	cd	cd	VG1-2_58	61	cd	NO	(cd + ce) * ((cd * ce) / (cd * ce))
+P21502_133_C12W1_2	Yes	Yes	ce	ce	VG1-2_58	62	ce	NA	0
+P21502_134_C12W1_1	Yes	Yes	cf	cf	VG1-2_61	63	cf	YES	(cf + cg) * ((cf * cg) / (cf * cg))
+P21502_134_C12W1_2	Yes	Yes	cg	cg	VG1-2_61	64	cg	NA	0
+P21502_135_C12W1_1	Yes	Yes	ch	ch	VG1-2_63	65	ch	NO	(ch + ci) * ((ch + ci) / (ch + ci))
+P21502_135_C12W1_2	Yes	Yes	ci	ci	VG1-2_63	66	ci	NA	0
+P21502_136_C12W1_1	Yes	Yes	cj	cj	VG1-2_64	67	cj	NO	(cj + af3 * (cj / (aq + cj + 0.15 * eh))) * ((cj * af3 * (cj / (aq + cj + 0.15 * eh))) / (cj * af3 * (cj / (aq + cj + 0.15 * eh))))
+P21502_136_C12W1_2**	No	Yes	af	af3	VG1-2_64	68	af3 * (cj / (aq + cj + 0.15 * eh))	NA	0
+P21502_137_C12W1_1	Yes	Yes	ck	ck	VG1-2_66	69	ck	YES	(ck + cl) * ((ck * cl) / (ck * cl))
+P21502_137_C12W1_2	Yes	Yes	cl	cl	VG1-2_66	70	cl	NA	0
+P21502_138_C12W1_1	Yes	Yes	cm	cm	VG1-2_67	71	cm	NO	(cm + cn) * ((cm * cn) / (cm * cn))
+P21502_138_C12W1_2	Yes	Yes	cn	cn	VG1-2_67	72	cn	NA	0
+P21502_139_C12W1_1	Yes	Yes	co	co	VG1-2_72	73	co	NO	(co + cp) * ((co * cp) / (co * cp))
+P21502_139_C12W1_2	Yes	Yes	cp	cp	VG1-2_72	74	cp	NA	0
+P21502_140_C12W1_1	Yes	Yes	cq	cq	VG1-2_74	75	cq	NO	(cq + cr) * ((cq * cr) / (cq * cr))
+P21502_140_C12W1_2	Yes	Yes	cr	cr	VG1-2_74	76	cr	NA	0
+P21502_141_C12W1_1	Yes	Yes	cs	cs	VG1-2_78	77	cs	NO	(ct + cu) * ((ct * cu) / (ct * cu))
+P21502_141_C12W1_2	Yes	Yes	ct	ct	VG1-2_78	78	ct	NA	0
+P21502_141_C12W1_3	Yes	Yes	cu	cu	VG1-2_78	79	cu	NA	0
+P21502_142_C12W1_1	Yes	Yes	cv	cv	VG1-2_81	80	cv	NO	(cv + aj2 * (cv / (bq + cv))) * ((cv * aj2 * (cv / (bq + cv))) / (cv * aj2 * (cv / (bq + cv))))
+P21502_142_C12W1_2*	No	Yes	aj	aj2	VG1-2_81	81	aj2 * (cv / (bq + cv))	NA	0
+P21502_143_C12W1_1	Yes	Yes	cw	cw	VG1-2_83	82	cw	YES	(cw + cx) * ((cw * cx) / (cw * cx))
+P21502_143_C12W1_2	Yes	Yes	cx	cx	VG1-2_83	83	cx	NA	0
+P21502_144_C12W1_1	Yes	Yes	cy	cy	VG1-2_85	84	cy	NO	(cy + cz) * ((cy * cz) / (cy * cz))
+P21502_144_C12W1_2	Yes	Yes	cz	cz	VG1-2_85	85	cz	NA	0
+P21502_145_C12W1_1	Yes	Yes	da	da	VG1-2_86	86	da	NO	(da + ak2 * (da / (ay + da))) * ((da * ak2 * (da / (ay + da))) / (da * ak2 * (da / (ay + da))))
+P21502_145_C12W1_2*	No	Yes	ak	ak2	VG1-2_86	87	ak2 * (da / (ay + da))	NA	0
+P21502_146_C12W1_1	Yes	Yes	db	db	VG1-2_88	88	db	YES	(db + dc) * ((db * dc) / (db * dc))
+P21502_146_C12W1_2	Yes	Yes	dc	dc	VG1-2_88	89	dc	NA	0
+P21502_147_C12W1_1*	No	Yes	am	am2	VG1-2_89	90	am2 * (de / (at + de))	NO	(am2 * (de / (at + de)) + de) * ((am2 * (de / (at + de)) * de) / (am2 * (de / (at + de)) * de))
+P21502_147_C12W1_2	Yes	Yes	de	de	VG1-2_89	91	de	NA	0
+P21502_148_C12W1_1	Yes	Yes	dg	dg	VG1-2_90	92	dg	NO	(dg + dd) * ((dg * dd) / (dg * dd))
+P21502_148_C12W1_2	Yes	Yes	dd	dd	VG1-2_90	93	dd	NA	0
+P21502_149_C12W1_1	Yes	Yes	dh	dh	VG1-2_93	94	dh	NO	(dh + di) * ((dh * di) / (dh * di))
+P21502_149_C12W1_2	Yes	Yes	di	di	VG1-2_93	95	di	NA	0
+P21502_150_C12W1_1	Yes	Yes	dj	dj	VG1-2_94	96	dj	YES	(dj + dk) * ((dj * dk) / (dj * dk))
+P21502_150_C12W1_2	Yes	Yes	dk	dk	VG1-2_94	97	dk	NA	0
+P21502_151_C12W1_1	Yes	Yes	dl	dl	VG1-2_95	98	dl	NO	(dl + dm) * ((dl * dm) / (dl * dm))
+P21502_151_C12W1_2	Yes	Yes	dm	dm	VG1-2_95	99	dm	NA	0
+P21502_152_C12W1_1**	No	Yes	ab	ab3	VG1-2_103	100	ab3 * (dn / (bu + bf + dn))	NO	(ab3 * (dn / (bu + bf + dn)) + dn) * ((ab3 * (dn / (bu + bf + dn)) * dn) / (ab3 * (dn / (bu + bf + dn)) * dn))
+P21502_152_C12W1_2	Yes	Yes	dn	dn	VG1-2_103	101	dn	NA	0
+P21502_153_C12W1_1	Yes	Yes	do	do	VG1-2_104	102	do	NO	(do + dp) * ((do * dp) / (do * dp))
+P21502_153_C12W1_2	Yes	Yes	dp	dp	VG1-2_104	103	dp	NA	0
+P21502_154_C12W1_1	Yes	Yes	dq	dq	VG1-2_105	104	dq	YES	(dq + dr) * ((dq * dr) / (dq * dr))
+P21502_154_C12W1_2	Yes	Yes	dr	dr	VG1-2_105	105	dr	NA	0
+P21502_155_C12W1_1	Yes	Yes	ds	ds	VG1-2_106	106	ds	YES	(ds + dt) * ((ds * dt) / (ds * dt))
+P21502_155_C12W1_2	Yes	Yes	dt	dt	VG1-2_106	107	dt	NA	0
+P21502_156_C12W1_1	Yes	Yes	du	du	VG1-2_107	108	du	NO	(du + dv) * ((du * dv) / (du * dv))
+P21502_156_C12W1_2	Yes	Yes	dv	dv	VG1-2_107	109	dv	NA	0
+R05_C12W1_1	Yes	Yes	dx	dx	RO5AC	110	dx	NO	(dx + dy) * ((dx * dy) / (dx * dy))
+R05_C12W1_2	Yes	Yes	dy	dy	RO5AC	111	dy	NA	0
+Unknown1_VGx_C12W1_1	Yes	Yes	dz	dz	VG1-2_99or65	112	dz	YES	(dz + ea) * ((dz * ea) / (dz * ea))
+Unknown1_VGx_C12W1_2	Yes	Yes	ea	ea	VG1-2_99or65	113	ea	NA	0
+Unknown1_VGy_C12W1_1	Yes	Yes	eb	eb	VG1-2_65or99	114	eb	NO	(eb + ec) * ((eb * ec) / (eb * ec))
+Unknown1_VGy_C12W1_2	Yes	Yes	ec	ec	VG1-2_65or99	115	ec	NA	0
+P21502_106_C12W1_1	Yes	Yes	ed	ed	GP2-4_32	116	ed	YES	(ed + ef) * ((ed * ef) / (ed * ef))
+P21502_106_C12W1_2	Yes	Yes	ee	ee	GP2-4_32	117	ee	NA	0
+P21502_119_C12W1_3	Yes	Yes	ef	ef	GP2-4_54	118	ef	NA	0

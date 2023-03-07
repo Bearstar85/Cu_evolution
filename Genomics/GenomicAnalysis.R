@@ -3,13 +3,8 @@
 rm(list=ls())
 getwd()
 #and set the work directory in case we have moved around or opened another project
-#setwd("~/Users/xanbjg/Documents/R/Cu_evolution/Genomics")
+setwd("~/Documents/R/Cu_evolution/Genomics")
 dir()
-
-# loading packages containing functions. Access the functions that these contain.
-# check if you have these under packages
-# you probably don't have it so you have to install it before. Everytime I start R studio
-# I have to run these librarys. 
 
 #packages & functions
 library(drc)
@@ -36,6 +31,9 @@ library(gplots)
 library(staplr)
 library(dplyr)
 library(naniar)
+library("Hmisc")
+library(ggrepel)
+library(MASS)
 #install.packages("naniar")
 #Read in data and look at it####
 
@@ -51,45 +49,42 @@ Fitness_C <- subset.data.frame(Fitness_C, select = c("Strain", "Barcode_mean"))
 colnames(Fitness_C) <- c("Strain", "Barcode_C")
 Barcode_Fitness2 <- join(Fitness_C, Fitness_Cu, by = "Strain")
 
-#Lets also comute the relative inhibition of growth via barcode observations
+#Lets also compute the relative inhibition of growth via barcode observations
 Barcode_Fitness2$Barcoded_CuInhibition <- Barcode_Fitness2$Barcode_Cu/Barcode_Fitness2$Barcode_C
 plot(Barcode_Fitness2$Barcode_Cu~Barcode_Fitness2$Barcoded_CuInhibition)
-#super correlated so this will not affect analysis much
+#super correlated so either parameter can probably be used without affect the analysis much
 
 #Metadata for linking genomic ID and adding other phenotypes
 Fitness <- read.table(file = "Input/DRCpredictions.txt", sep = '\t', header = TRUE)
 sapply(Fitness, class)
 
-#Lets also compute the responsrange between EC05 and EC95
+#Lets also compute the respons-range between EC05 and EC95
 Fitness$ResponseRange_Cu <- Fitness$EC95/Fitness$EC05
 plot(Fitness$ResponseRange_Cu~Fitness$EC50)
-#So the slope/responsrange and EC50 is not correlated so they may capture diffrent modes of tolerance
+#So the slope/response-range and EC50 is not correlated so they may capture different modes of tolerance
+plot(Fitness$ResponseRange_Cu~Fitness$EC95)
+plot(Fitness$ResponseRange_Cu~Fitness$EC05)
+#Response-range differences driven mainly by strain variability in low EC05
 
-#Lets reduce to data to Cu phenotype relevant traits that are not entirely autocorrelated
+#Lets reduce data to Cu phenotype relevant traits that are not entirely autocorrelated
 Fitness2 <- subset.data.frame(Fitness, select = c("Strain", "EC05", "EC50", 
                                                          "EC95", "ResponseRange_Cu", "Growth_Rate", "FvFm",
                                                          "Surface_Vol_ratio", "CuGrowth"))
+#Merge the barcoded and monoclonally derived phenotypes
 Meta <- join(Barcode_Fitness2, Fitness2, by = "Strain")
 
+#Now move on the the genomic traits
+
+#Read in file for indexing WGS data files
 Index <- read.table(file = "Input/StrainMeta.txt", sep = '\t', header = TRUE)
 
 #Read in information about the copper metabolism genes
 Annotations <- read.table(file = "Input/CuMetabolism_SM_short.txt", sep = '\t', header = TRUE)
 sapply(Annotations, class)
 
-#Make a list of input files of gene coverage across Cu metabolism genes
-InputFiles <- list.files(path = "~/Documents/R/Cu_evolution/Genomics/Input/CuGeneCoverage")
+#Make a list of WGS input files of gene coverage across Cu metabolism genes
+InputFiles <- list.files(path = "Input/CuGeneCoverage")
 InputFiles
-
-#myData <- read.table(file = "Input/CuGeneCoverage/CuGenesOfInterest.lst", sep = '\t', header = TRUE)
-#P14203_101_CuCoverage.tsv
-
-#sapply(Indexed, class)
-#library(RColorBrewer)
-#n <- 97
-#qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-#col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
-#pie(rep(1,n), col=sample(col_vector, n))
 
 WGScoverage  <- NULL;
 #i <-"P14203_105_CuCoverage.tsv"
@@ -166,37 +161,38 @@ for (i in InputFiles) {
           #legend.key = element_rect(fill = NA, color = NA),
           #legend.spacing.x=unit(0, "cm"),
           #legend.spacing.y=unit(0, "cm"))
-  
+ 
+# the individual files are not that intrestint but can be outputed below 
  # print(Fig1)
-  
  # dev.copy(pdf, output3)
  # dev.off()
   
 }
 
-#Heres the avarage genome coverage per strain
+#Here is the avarage genome coverage per strain
 WGScoverage2 <- subset.data.frame(WGScoverage, grepl('Genome', WGScoverage$Gene))
-mean(WGScoverage2$Model.mean)
-#Lets see what the per strain avarage coverage is, we probably want to normalize to that
+median(WGScoverage2$Model.mean)
+min(WGScoverage2$Model.mean)
+max(WGScoverage2$Model.mean)
+#Lets see what the per strain avarage coverage is, and for comparison we need to normalize against the genomic mean
 #Remove the genome data
 WGScoverage3 <- WGScoverage[ !(WGScoverage$Gene %in% c('Genome')), ]
 
-#Lets also change 0 to NA  and remove samples with No coverage from analysis 
-#(lots of this is from GP_44 with very low genomic coverage 0.6)
+#Lets also change any 0 to NA  and remove samples with No coverage from analysis 
+#(lots of this is from GP_44 (can be excluded from analysis) with very low genomic coverage 0.6)
 WGScoverage3$Coverage_vs_genome[WGScoverage3$Coverage_vs_genome==0] <- NA
 WGScoverage3 <- WGScoverage3[complete.cases(WGScoverage3$Coverage_vs_genome), ]
 
 
-#OPTIONAL change to pool copies of genes in close proximity on contig
-#Basicly go through and change WGScoverage4 to WGScoverage3 and "gene" to "Putative_identity_INDEX"
-
+#we need to deal with homologus genes somehow
 WGScoverage4 <- join(WGScoverage3, Annotations, by = "Gene", type="right")
 WGScoverage4 <- ddply(WGScoverage4, c("Putative_identity_INDEX", "Strain"), summarise,
                          Sum = sum(Coverage_vs_genome), N = n(), sd = sd(Coverage_vs_genome), 
                          Min = min(Coverage_vs_genome), 
                          Max = max(Coverage_vs_genome))
 
-#Here it is possible to change
+#I choose to pool copies of genes in close proximity on same contig, since i am looking for tandem repeats
+#Here it is possible to change so genes are processed separately (skip this step), or summed across the genome
 WGScoverageMean <- ddply(WGScoverage4, c("Putative_identity_INDEX"), summarise,
                  Mean = mean(Sum), N = n(), sd = sd(Sum), 
                  Min = min(Sum), 
@@ -204,9 +200,7 @@ WGScoverageMean <- ddply(WGScoverage4, c("Putative_identity_INDEX"), summarise,
 
 WGScoverageMean$Range <- WGScoverageMean$Max-WGScoverageMean$Min
 
-#Here it is possible to change 
-
-#Lets round the numbers of for a tabel
+#Lets round the numbers of for a table
 WGScoverageMean_export <- WGScoverageMean
 WGScoverageMean_export$Mean <- signif(WGScoverageMean_export$Mean, digits = 2)
 WGScoverageMean_export$sd <- signif(WGScoverageMean_export$sd, digits = 2)
@@ -278,8 +272,7 @@ dev.off()
 
 #Changes in coverage filter####
 
-#Okey we should sort away any genes that have less than 1 in min-max range
-#since this suggests no change in copy number
+#Okey we can sort away any genes that have less than 1 in min-max range, i.e. no tandem repeats in any strains
 WGScoverageMean_changing <- WGScoverageMean
 WGScoverageMean_changing$Range[WGScoverageMean_changing$Range<1] <- NA
 WGScoverageMean_changing <- WGScoverageMean_changing[complete.cases(WGScoverageMean_changing$Range), ]
@@ -328,23 +321,25 @@ Changing_genes2 <- join(Changing_genes, Meta, by = "Strain", type = "left")
 Changing_genes2 <- join(Changing_genes2, IndexShort, by = "Strain", type = "left")
 sapply(Changing_genes2, class)
 
-#There is some duplicated colums so i will extract data for graphs
-#Changing_genes2 <- subset.data.frame(Changing_genes2, select = c("Putative_identity_INDEX", "Population", "Strain", "CuGrowth", "EC50", "Barcode_Cu", "Coverage_vs_genome"))
+#There is some duplicated columns so i will extract data for graphs
 plot(Changing_genes2$Coverage_vs_genome~Changing_genes2$EC50)
 unique(Changing_genes2$Putative_identity_INDEX)
 unique(Changing_genes2$Strain)
 sapply(Changing_genes2, class)
+
+#Create strain color spectra
 library(RColorBrewer)
 n <- 58
 qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
 col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
 pie(rep(1,n), col=sample(col_vector, n))
 
+#Lets regress gene copy-number variance against EC50
 FigReg <- ggplot(Changing_genes2, aes(EC50, Coverage_vs_genome)) +
   geom_point(mapping = aes(color = Strain, shape = Population), size = 1.2) + #color = Population, shape = Population
   facet_wrap(~Putative_identity_INDEX) +
   #labs(colour="Population-Timepoint") +
-  stat_smooth(mapping = aes(), size = 0.5, method = 'lm', formula = y ~ x, se= TRUE) +
+  stat_smooth(mapping = aes(), linewidth = 0.5, method = 'lm', formula = y ~ x, se= TRUE) +
   geom_hline(yintercept=1) +
   #scale_color_brewer(palette = "Paired") +
   scale_color_manual(values=c(col_vector)) + #aesthetics = c("colour", "fill")) +
@@ -378,11 +373,12 @@ print(FigReg)
 dev.copy(pdf, "Plots/Reg_EC50.pdf")
 dev.off()
 
+#Lets try the same for the Barcode_Cu growth rates
 FigReg2 <- ggplot(Changing_genes2, aes(Barcode_Cu, Coverage_vs_genome)) +
   geom_point(mapping = aes(color = Strain, shape = Population), size = 1.2) + #color = Population, shape = Population
   facet_wrap(~Putative_identity_INDEX) +
   #labs(colour="Population-Timepoint") +
-  stat_smooth(mapping = aes(), size = 0.5, method = 'lm', formula = y ~ x, se= TRUE) + #Fits liniear regression to data
+  stat_smooth(mapping = aes(), linewidth = 0.5, method = 'lm', formula = y ~ x, se= TRUE) + #Fits liniear regression to data
   #scale_color_brewer(palette = "Paired") +
   scale_color_manual(values=c(col_vector)) + #aesthetics = c("colour", "fill")) +
   scale_shape_manual(values=c(1, 2)) +
@@ -416,7 +412,9 @@ print(FigReg2)
 
 dev.copy(pdf, "Plots/Reg_Barcoded_Cu.pdf")
 dev.off()
-#Okey lets try and build a matrix to correlate phenotype-genotype
+
+#Okey no obvious correlations seen, and several gene models are probably only duplicated/deleted in a couple of strains
+#lets try and build a matrix to correlate phenotype-genotype
 #We also need a dataframe for cbinding Matrix data
 MatrixAll <- data.frame(unique(Changing_genes$Putative_identity_INDEX))
 colnames(MatrixAll) <- (c('Putative_identity_INDEX'))
@@ -439,13 +437,6 @@ colnames(Coverage) <- (c("Putative_identity_INDEX", i))
 }
 
 sapply(MatrixAll, class)
-
-#Lets change the fucking header now
-#MatrixHead <- colnames(MatrixAll)
-#MatrixHead <- gsub("_P21502_[0-9]{3}_C12W1", "", MatrixHead)
-#MatrixAll2 <- MatrixAll
-#colnames(MatrixAll2) <- MatrixHead
-
 
 #Reformat to Matrix
 V <- as.vector(MatrixAll$Putative_identity_INDEX)
@@ -488,7 +479,6 @@ x[!(x %in% y)]
 y[!(y %in% x)]
 
 MatrixAll3 <- rbind(MatrixAll2, Meta2)
-
 MatrixAll_cF <- scale(MatrixAll3, scale = F, center = F) #center = F, scale = T)
 MatrixAll_cT <- scale(MatrixAll3, scale = T, center = T) #center = T, scale = T)
 
@@ -526,8 +516,6 @@ heatmap.2(CorrelationMAtrix, col = colRamp, scale="none", revC = T, margins = c(
 dev.copy(pdf, "Plots/Heat_Corr.pdf")
 dev.off()
 
-#install.packages("Hmisc")
-library("Hmisc")
 #Pvalues adjusted based on Holmes correction
 Pvalues <- rcorr(as.matrix(t(MatrixAll3)), type = "pearson")
 P <- print(Pvalues$P)
@@ -546,13 +534,15 @@ write.table(P_holms_sig, "Results/P_holms_sig.txt", sep='\t',  col.names=TRUE, r
 
 #Okey lets export list of significant correlations
 
-#PCAs####
+#PCAs
 #Add Population/strain vector
 IndexShort2 <- IndexShort[ !(IndexShort$Strain %in% c('GP2-4_44', 'GP2-4_45', 'GP2-4_46', 'GP2-4_46',"VG1-2_65", "VG1-2_99")), ]
-
+IndexShort2 <- IndexShort2 %>% arrange(Strain)
+#unique(Meta$Strain)
 #Vectors for coloring PCA
 P <- IndexShort2$Population
 ID <- IndexShort2$Strain
+ID
 #Run PCA on many factors
 PCA <- prcomp(na.omit(t(MatrixAll3)), scale = TRUE)
 summary(PCA)
@@ -573,8 +563,8 @@ PCA_all <-ggbiplot(PCA, ellipse=TRUE, labels=ID, groups=P, alpha=0, varname.size
   #theme(legend.text = element_text(face = "italic")) +
   theme(aspect.ratio=1) +
   theme(legend.position = "none") +
-  xlim(-2, 3) +
-  ylim(-2.25, 2)
+  xlim(-5, 3) +
+  ylim(-2.25, 3)
 
 print(PCA_all)
 dev.copy(pdf, "Plots/PCAall.pdf")
@@ -584,7 +574,6 @@ dev.off()
 #The PCA is just a messier form of data then the heatmap of correlation coefficents. Also poor resolution in the two first axises.
 
 #But as a final test how about we resolve the patterns in Cu genes to PCA1, and plot this against the PCA1 of the phenotypes?
-
 Phenotypes <- MatrixAll3[-c(1:18),]
 Genotypes <- MatrixAll3[c(1:18),]
 PCA_Geno <- prcomp(na.omit(t(Genotypes)), scale = TRUE)
@@ -634,8 +623,7 @@ PCA2 <-ggbiplot(PCA_Pheno, ellipse=TRUE, labels=ID, groups=P, alpha=0, varname.s
 
 print(PCA2)
 
-
-#Okey lets tru and correlate first component of each dataset
+#Okey lets try and correlate first component of each dataset (genotype PCA with phenptype PCA), to see if there are patterns
 PCA_Geno <- prcomp(na.omit((Genotypes)), scale = TRUE)
 PCA_Pheno <-prcomp(na.omit((Phenotypes)), scale = TRUE)
 
@@ -651,7 +639,6 @@ PCA_GvsP<- cbind(PCA_P, PCA_G, IndexShort2)
 plot(PCA_GvsP$G_PC1, PCA_GvsP$P_PC1)
 text(PCA_GvsP$G_PC1, PCA_GvsP$P_PC1-1, labels=PCA_GvsP$Strain)
 
-library(ggrepel)
 ggplot(PCA_GvsP, aes(G_PC1, P_PC1)) +
   geom_point(aes(color = Population)) +
   geom_text_repel(aes(label = Strain))
@@ -674,8 +661,8 @@ ggplot(PCA_GvsP, aes(P_PC2, G_PC2)) +
 
 #Cannot say that that was enlightening in any way. PCA are to crude
 
-#Multiple regression####
-#I am almost against even doing this given the dataspread and lack of correlation
+#Multiple regressions
+#I am almost against even doing this given the dataspread and lack of correlation patterns
 FitData <- as.data.frame(t(MatrixAll3))
 Variables <- colnames(FitData[c(1:18),])
 FitData[, c(1:18)]
@@ -688,9 +675,9 @@ fit <- lm(FitData$EC50 ~ FitData[, c(1)]+FitData[, c(2)]+FitData[, c(3)]+
           FitData[, c(16)]+FitData[, c(17)]+FitData[, c(18)],
           data=FitData)
 
-summary(fit) # show results
+summary(fit) # shows NS results
 
-library(MASS)
+#Lets try and reduce the dimensions of the regressions to find relevant paramters
 step <- stepAIC(fit, direction="both")
 step$anova # display results
 
@@ -699,7 +686,7 @@ Iterative_fit <- lm(FitData$EC50 ~ FitData[, c(13)]+FitData[, c(7)]+FitData[, c(
             +FitData[, c(16)]+FitData[, c(3)],
           data=FitData)
 
-summary(Iterative_fit) # show results
+summary(Iterative_fit) # show results (still not significant)
 print
 colnames(FitData[, c(13)])
 colnames(FitData)
@@ -710,7 +697,7 @@ colnames(FitData)
 # [3] "Cue5-4_homolog_C3"
 
 
-#That was a pointless, and statistically unsound exploration. Even cheeroicking data does not make a multiple regression significant
+#That was a pointless, and somewhat statistically unsound exploration. Even cheery-picking data does not make a multiple regression significant
 #Clearly, across all strains, gene-copy number does not explain Cu tolerance, however the data is twisted and turned
 #Still possible that some aspect of very tolerant individuals can be partially explained by copy-number variance
 #Like the duplication of the ZIP multimetal transporter in VG1-2_81
